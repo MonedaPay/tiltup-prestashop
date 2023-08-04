@@ -34,7 +34,7 @@ services:
     volumes:
       - psdata:/var/www/html
       - type: bind
-        source: ./
+        source: ./module
         target: /var/www/html/modules/tiltupcryptopaymentsmodule
 
 networks:
