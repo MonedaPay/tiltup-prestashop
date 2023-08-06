@@ -120,14 +120,14 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: dbdata
+      #          volumeMounts:
+      #            - mountPath: /var/lib/mysql
+      #              name: dbdata
       restartPolicy: Always
-      volumes:
-        - name: dbdata
-          persistentVolumeClaim:
-            claimName: dbdata
+#      volumes:
+#        - name: dbdata
+#          persistentVolumeClaim:
+#            claimName: dbdata
 status: { }
 
 ---
@@ -196,37 +196,37 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/www/html
-              name: psdata
+      #          volumeMounts:
+      #            - mountPath: /var/www/html
+      #              name: psdata
       #            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
       #              name: prestashop-claim1
       restartPolicy: Always
-      volumes:
-        - name: psdata
-          persistentVolumeClaim:
-            claimName: psdata
+#      volumes:
+#        - name: psdata
+#          persistentVolumeClaim:
+#            claimName: psdata
 #        - name: prestashop-claim1
 #          persistentVolumeClaim:
 #            claimName: prestashop-claim1
 status: { }
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: psdata
-  name: psdata
-
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
-status: { }
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    io.kompose.service: psdata
+#  name: psdata
+#
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 100Mi
+#status: { }
 #
 #---
 #apiVersion: v1
