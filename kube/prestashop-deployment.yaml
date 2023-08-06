@@ -179,18 +179,14 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_NAME
-              value: prestashop
             - name: DB_PASSWD
               value: admin
             - name: DB_SERVER
               value: mysql
-            - name: DB_USER
-              value: root
             - name: PS_DEV_MODE
               value: "1"
             - name: PS_DOMAIN
-              value: localhost:8080
+              value: localhost:80
             - name: PS_FOLDER_INSTALL
               value: install-dev
             - name: PS_INSTALL_AUTO
