@@ -34,7 +34,6 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-
 spec:
   ports:
     - name: "80"
@@ -105,7 +104,7 @@ spec:
         kompose.version: 1.30.0 (9d8dcb518)
       creationTimestamp: null
       labels:
-        io.kompose.network/tiltup-prestashop-prestashop-network: "true"
+        io.kompose.network/prestashop-network: "true"
         io.kompose.service: mysql
     spec:
       containers:
@@ -121,14 +120,14 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: { }
-      #          volumeMounts:
-      #            - mountPath: /var/lib/mysql
-      #              name: dbdata
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: dbdata
       restartPolicy: Always
-#      volumes:
-#        - name: dbdata
-#          persistentVolumeClaim:
-#            claimName: dbdata
+      volumes:
+        - name: dbdata
+          persistentVolumeClaim:
+            claimName: dbdata
 status: { }
 
 ---
@@ -159,7 +158,6 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-
 spec:
   replicas: 1
   selector:
@@ -174,7 +172,7 @@ spec:
         kompose.version: 1.30.0 (9d8dcb518)
       creationTimestamp: null
       labels:
-        io.kompose.network/tiltup-prestashop-prestashop-network: "true"
+        io.kompose.network/prestashop-network: "true"
         io.kompose.service: prestashop
     spec:
       containers:
@@ -198,38 +196,37 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-      #          volumeMounts:
-      #            - mountPath: /var/www/html
-      #              name: psdata
-      #            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-      #              name: prestashop-claim1
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: psdata
+            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+              name: prestashop-claim1
       restartPolicy: Always
-#      volumes:
-#        - name: psdata
-#          persistentVolumeClaim:
-#            claimName: psdata
+      volumes:
+        - name: psdata
+          persistentVolumeClaim:
+            claimName: psdata
 #        - name: prestashop-claim1
 #          persistentVolumeClaim:
 #            claimName: prestashop-claim1
 status: { }
 
-# TODO Uncomment once PV TF ready
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: psdata
-#  name: psdata
-#
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: psdata
+  name: psdata
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: { }
 #
 #---
 #apiVersion: v1
