@@ -53,7 +53,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/load-balancer-name: k8s-alb-${NODE_ENV}-external
     alb.ingress.kubernetes.io/group.name: k8s-alb-${NODE_ENV}-external
-    alb.ingress.kubernetes.io/group.order: '100'
+    alb.ingress.kubernetes.io/group.order: '101'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
     alb.ingress.kubernetes.io/healthcheck-path: "/"
