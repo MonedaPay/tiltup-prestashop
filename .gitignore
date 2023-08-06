@@ -67,7 +67,7 @@
 
 /vendor/*
 /docs/phpdoc-sf/
-/module/composer.lock
+/composer.lock
 *.hot-update.js
 *.hot-update.json
 
