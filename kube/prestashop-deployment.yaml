@@ -9,7 +9,7 @@ metadata:
   labels:
     io.kompose.service: mysql
   name: mysql
-  namespace: default
+
 spec:
   ports:
     - name: "3306"
@@ -34,7 +34,7 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-  namespace: default
+
 spec:
   ports:
     - name: "80"
@@ -90,7 +90,7 @@ metadata:
   labels:
     io.kompose.service: mysql
   name: mysql
-  namespace: default
+
 spec:
   replicas: 1
   selector:
@@ -139,7 +139,7 @@ metadata:
   labels:
     io.kompose.service: dbdata
   name: dbdata
-  namespace: default
+
 spec:
   accessModes:
     - ReadWriteOnce
@@ -159,7 +159,7 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-  namespace: default
+
 spec:
   replicas: 1
   selector:
@@ -222,7 +222,7 @@ status: { }
 #  labels:
 #    io.kompose.service: psdata
 #  name: psdata
-#  namespace: default
+#
 #spec:
 #  accessModes:
 #    - ReadWriteOnce
@@ -239,7 +239,7 @@ status: { }
 #  labels:
 #    io.kompose.service: prestashop-claim1
 #  name: prestashop-claim1
-#  namespace: default
+#
 #spec:
 #  accessModes:
 #    - ReadWriteOnce
