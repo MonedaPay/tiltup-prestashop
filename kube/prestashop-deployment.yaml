@@ -121,9 +121,9 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: dbdata
+      #          volumeMounts:
+      #            - mountPath: /var/lib/mysql
+      #              name: dbdata
       restartPolicy: Always
 #      volumes:
 #        - name: dbdata
@@ -186,7 +186,7 @@ spec:
             - name: PS_DEV_MODE
               value: "1"
             - name: PS_DOMAIN
-              value: localhost:80
+              value: prestashop.${NODE_ENV}.tiltup.io
             - name: PS_FOLDER_INSTALL
               value: install-dev
             - name: PS_INSTALL_AUTO
