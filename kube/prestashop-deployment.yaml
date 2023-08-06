@@ -199,8 +199,8 @@ spec:
           volumeMounts:
             - mountPath: /var/www/html
               name: psdata
-            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-              name: prestashop-claim1
+      #            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+      #              name: prestashop-claim1
       restartPolicy: Always
       volumes:
         - name: psdata
