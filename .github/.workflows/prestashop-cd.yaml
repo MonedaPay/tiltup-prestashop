@@ -1,0 +1,83 @@
+name: Continuous Deployment - Prestashop
+run-name: ${{ (github.head_ref =='' && 'manual') || github.head_ref}} -> ${{ (inputs.env-name =='' && 'dev') ||  inputs.env-name }}
+
+on:
+  pull_request:
+    types: [ closed ]
+
+  workflow_dispatch:
+    inputs:
+      env-name:
+        description: 'environment name, one of: dev, staging, production'
+        required: true
+        default: dev
+        type: environment
+
+  workflow_call:
+    inputs:
+      env-name:
+        description: 'environment name, one of: dev, staging, production'
+        required: true
+        type: string
+
+jobs:
+  prestashop-cd:
+    name: 'Prestashop - deploy'
+    runs-on: [ ubuntu-20.04 ]
+    environment: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
+    env:
+      env-name: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
+      app-name: prestashop
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+
+      - name: Display SemVer
+        shell: bash
+        run: |
+          echo "GitVer: $GITVERSION_MAJORMINORPATCH"
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy on ${{env.env-name}} EKS Cluster
+        shell: bash
+        env:
+          app-name: ${{ env.app-name }}
+          env-name: ${{ env.env-name }}
+          NODE_ENV: ${{ env.env-name }}
+          ECR_HOST: ${{ secrets.ECR_HOST }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        working-directory: ./kube
+        run: |
+          aws eks update-kubeconfig --region ${{vars.AWS_REGION }} --name ${{env.env-name}}
+          aws sts get-caller-identity
+          for f in *;
+          do
+            envsubst < $f | kubectl apply -n ${{env.env-name}} -f -
+          done
+          
+          kubectl rollout status deployment ${{env.app-name}} -n ${{env.env-name}} --timeout=180s
+
+

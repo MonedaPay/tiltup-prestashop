@@ -1,12 +1,14 @@
 version: '3'
 services:
   mysql:
-    container_name: some-mysql
+    container_name: mysql
     image: mysql:5.7
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: prestashop
+    ports:
+      - 3306:3306
     networks:
       - prestashop_network
     volumes:
@@ -19,14 +21,14 @@ services:
     depends_on:
       - mysql
     ports:
-      - 8080:80
+      - 80:80
     environment:
-      DB_SERVER: some-mysql
+      DB_SERVER: mysql
       DB_NAME: prestashop
       DB_USER: root
       DB_PASSWD: admin
       PS_INSTALL_AUTO: 1
-      PS_DOMAIN: localhost:8080
+      PS_DOMAIN: localhost:80
       PS_DEV_MODE: 1
       PS_FOLDER_INSTALL: install-dev
     networks:
@@ -34,7 +36,7 @@ services:
     volumes:
       - psdata:/var/www/html
       - type: bind
-        source: ./
+        source: ./module
         target: /var/www/html/modules/tiltupcryptopaymentsmodule
 
 networks:
