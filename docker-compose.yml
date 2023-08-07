@@ -38,6 +38,9 @@ services:
       - type: bind
         source: ./module
         target: /var/www/html/modules/tiltupcryptopaymentsmodule
+      - type: bind
+        source: ./scripts
+        target: /tmp/post-install-scripts
 
 networks:
   prestashop_network:
