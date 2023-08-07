@@ -120,14 +120,14 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: { }
-      #          volumeMounts:
-      #            - mountPath: /var/lib/mysql
-      #              name: dbdata
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: dbdata
       restartPolicy: Always
-#      volumes:
-#        - name: dbdata
-#          persistentVolumeClaim:
-#            claimName: dbdata
+      volumes:
+        - name: dbdata
+          persistentVolumeClaim:
+            claimName: dbdata
 status: { }
 
 ---
@@ -200,52 +200,76 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-      #          volumeMounts:
-      #            - mountPath: /var/www/html
-      #              name: psdata
-      #            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-      #              name: prestashop-claim1
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: psdata
+            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+              name: tiltupcryptopaymentsmodule
       restartPolicy: Always
-#      volumes:
-#        - name: psdata
-#          persistentVolumeClaim:
-#            claimName: psdata
-#        - name: prestashop-claim1
-#          persistentVolumeClaim:
-#            claimName: prestashop-claim1
+      volumes:
+        - name: psdata
+          persistentVolumeClaim:
+            claimName: psdata
+        - name: tiltupcryptopaymentsmodule
+          persistentVolumeClaim:
+            claimName: tiltupcryptopaymentsmodule
 status: { }
 
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: psdata
-#  name: psdata
-#
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-#
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: prestashop-claim1
-#  name: prestashop-claim1
-#
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-0682f553d71c9b53e
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: psdata
+  name: psdata
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: { }
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tiltupcryptopaymentsmodule
+  name: tiltupcryptopaymentsmodule
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: { }
 
