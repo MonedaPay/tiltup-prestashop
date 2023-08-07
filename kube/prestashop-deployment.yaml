@@ -34,7 +34,6 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-
 spec:
   ports:
     - name: "80"
@@ -54,15 +53,15 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/load-balancer-name: k8s-alb-${NODE_ENV}-external
     alb.ingress.kubernetes.io/group.name: k8s-alb-${NODE_ENV}-external
-    alb.ingress.kubernetes.io/group.order: '100'
+    alb.ingress.kubernetes.io/group.order: '101'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
     alb.ingress.kubernetes.io/healthcheck-path: "/"
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:237649144029:certificate/d05269b2-ad5b-446a-9dd6-dc8925d5970b
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:237649144029:certificate/9f2690d1-6454-4112-9e9a-f7aca5189af2
     alb.ingress.kubernetes.io/actions.port: >
-      {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"3005","Weight":100}]}}
+      {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
 
 spec:
   ingressClassName: alb
@@ -105,7 +104,7 @@ spec:
         kompose.version: 1.30.0 (9d8dcb518)
       creationTimestamp: null
       labels:
-        io.kompose.network/tiltup-prestashop-prestashop-network: "true"
+        io.kompose.network/prestashop-network: "true"
         io.kompose.service: mysql
     spec:
       containers:
@@ -121,9 +120,9 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: dbdata
+      #          volumeMounts:
+      #            - mountPath: /var/lib/mysql
+      #              name: dbdata
       restartPolicy: Always
 #      volumes:
 #        - name: dbdata
@@ -159,7 +158,6 @@ metadata:
   labels:
     io.kompose.service: prestashop
   name: prestashop
-
 spec:
   replicas: 1
   selector:
@@ -174,7 +172,7 @@ spec:
         kompose.version: 1.30.0 (9d8dcb518)
       creationTimestamp: null
       labels:
-        io.kompose.network/tiltup-prestashop-prestashop-network: "true"
+        io.kompose.network/prestashop-network: "true"
         io.kompose.service: prestashop
     spec:
       containers:
@@ -185,11 +183,15 @@ spec:
               value: mysql
             - name: PS_DEV_MODE
               value: "1"
-            - name: PS_DOMAIN
-              value: localhost:80
             - name: PS_FOLDER_INSTALL
               value: install-dev
+            - name: PS_FOLDER_ADMIN
+              value: admin-dev
+            - name: PS_DOMAIN
+              value: prestashop.${NODE_ENV}.tiltup.io
             - name: PS_INSTALL_AUTO
+              value: "1"
+            - name: PS_ENABLE_SSL
               value: "1"
           image: prestashop/prestashop:1.7.8.9-7.4-apache
           name: prestashop
@@ -202,18 +204,41 @@ spec:
       #            - mountPath: /var/www/html
       #              name: psdata
       #            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-      #              name: prestashop-claim1
+      #              name: tiltupcryptopaymentsmodule
       restartPolicy: Always
 #      volumes:
 #        - name: psdata
 #          persistentVolumeClaim:
 #            claimName: psdata
-#        - name: prestashop-claim1
+#        - name: tiltupcryptopaymentsmodule
 #          persistentVolumeClaim:
-#            claimName: prestashop-claim1
+#            claimName: tiltupcryptopaymentsmodule
 status: { }
 
-# TODO Uncomment once PV TF ready
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-0682f553d71c9b53e
+
 #---
 #apiVersion: v1
 #kind: PersistentVolumeClaim
@@ -237,8 +262,8 @@ status: { }
 #metadata:
 #  creationTimestamp: null
 #  labels:
-#    io.kompose.service: prestashop-claim1
-#  name: prestashop-claim1
+#    io.kompose.service: tiltupcryptopaymentsmodule
+#  name: tiltupcryptopaymentsmodule
 #
 #spec:
 #  accessModes:
