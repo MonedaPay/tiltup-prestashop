@@ -157,7 +157,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: prestashop
-  name: prestashop
+  name: tiltup-prestashop
 spec:
   replicas: 1
   selector:
