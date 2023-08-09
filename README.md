@@ -27,8 +27,7 @@ TiltUp Prestashop plugin
 
 ### Module installation
 
-On a vanilla environment the TiltUp module needs to be installed before it becomes usable. To that end, open a shell to
-the container and run
+The module is installed by a post-install script. However, it can also be installed/uninstalled from command line:
 
 ```shell
 php bin/console prestashop:module install tiltupcryptopaymentsmodule

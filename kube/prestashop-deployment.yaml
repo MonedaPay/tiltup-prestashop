@@ -157,7 +157,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: prestashop
-  name: prestashop
+  name: tiltup-prestashop
 spec:
   replicas: 1
   selector:
@@ -195,7 +195,6 @@ spec:
               value: "1"
           image: ${ECR_HOST}/tiltup-prestashop-${NODE_ENV}:${GITVERSION_FULLSEMVER}
           name: prestashop
-          imagePullPolicy: Never
           ports:
             - containerPort: 80
               hostPort: 80
