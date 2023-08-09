@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,63 +18,6 @@ spec:
     io.kompose.service: mysql
 status:
   loadBalancer: { }
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -o kube/prestashop-deployment.yaml
-    kompose.version: 1.30.0 (9d8dcb518)
-    external-dns.alpha.kubernetes.io/hostname: prestashop.${NODE_ENV}.tiltup.io
-    service.beta.kubernetes.io/aws-load-balancer-type: alb
-    kubernetes.io/ingress.class: alb
-  creationTimestamp: null
-  labels:
-    io.kompose.service: prestashop
-  name: prestashop
-spec:
-  ports:
-    - name: "80"
-      port: 80
-      targetPort: 80
-  selector:
-    io.kompose.service: prestashop
-status:
-  loadBalancer: { }
-
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ingress-prestashop
-  annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: k8s-alb-${NODE_ENV}-external
-    alb.ingress.kubernetes.io/group.name: k8s-alb-${NODE_ENV}-external
-    alb.ingress.kubernetes.io/group.order: '101'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
-    alb.ingress.kubernetes.io/healthcheck-path: "/"
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:237649144029:certificate/9f2690d1-6454-4112-9e9a-f7aca5189af2
-    alb.ingress.kubernetes.io/actions.port: >
-      {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
-
-spec:
-  ingressClassName: alb
-  rules:
-    - host: prestashop.${NODE_ENV}.tiltup.io
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: port
-                port:
-                  name: use-annotation
 
 ---
 
@@ -148,6 +90,64 @@ spec:
 status: { }
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -o kube/prestashop-deployment.yaml
+    kompose.version: 1.30.0 (9d8dcb518)
+    external-dns.alpha.kubernetes.io/hostname: prestashop.${NODE_ENV}.tiltup.io
+    service.beta.kubernetes.io/aws-load-balancer-type: alb
+    kubernetes.io/ingress.class: alb
+  creationTimestamp: null
+  labels:
+    io.kompose.service: prestashop
+  name: prestashop
+spec:
+  ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
+  selector:
+    io.kompose.service: prestashop
+status:
+  loadBalancer: { }
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-prestashop
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: k8s-alb-${NODE_ENV}-external
+    alb.ingress.kubernetes.io/group.name: k8s-alb-${NODE_ENV}-external
+    alb.ingress.kubernetes.io/group.order: '101'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:237649144029:certificate/9f2690d1-6454-4112-9e9a-f7aca5189af2
+    alb.ingress.kubernetes.io/actions.port: >
+      {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: prestashop.${NODE_ENV}.tiltup.io
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: port
+                port:
+                  name: use-annotation
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -216,6 +216,41 @@ spec:
 status: { }
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: psdata
+  name: psdata
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: { }
+
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    io.kompose.service: tiltupcryptopaymentsmodule
+#  name: tiltupcryptopaymentsmodule
+#
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 100Mi
+#status: { }
+
+
+---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -238,38 +273,3 @@ spec:
   csi:
     driver: efs.csi.aws.com
     volumeHandle: fs-0682f553d71c9b53e
-
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: psdata
-#  name: psdata
-#
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-#
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: tiltupcryptopaymentsmodule
-#  name: tiltupcryptopaymentsmodule
-#
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-
