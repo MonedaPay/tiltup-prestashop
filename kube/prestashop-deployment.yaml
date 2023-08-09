@@ -193,9 +193,9 @@ spec:
               value: "1"
             - name: PS_ENABLE_SSL
               value: "1"
-          image: tiltup-presta
+          image: tiltup-presta:latest
           name: prestashop
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
               hostPort: 80
