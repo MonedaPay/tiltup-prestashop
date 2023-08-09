@@ -1,10 +1,12 @@
 <?php
 
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
 
 class TiltUpCryptoPaymentsModule extends PaymentModule
 {
@@ -247,8 +249,12 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $apiAccess->save();
 
         $permissions = [
-            'customers' => ['GET' => 1, 'POST' => 1, 'PUT' => 1, 'PATCH' => 1, 'DELETE' => 1, 'HEAD' => 1],
-            'orders' => ['GET' => 1, 'POST' => 1, 'PUT' => 1, 'PATCH' => 1, 'DELETE' => 1, 'HEAD' => 1],
+            'customers' => ['GET' => 1, 'HEAD' => 1],
+            'shops' => ['GET' => 1, 'HEAD' => 1],
+            'currencies' => ['GET' => 1, 'HEAD' => 1],
+            'order_states' => ['GET' => 1, 'HEAD' => 1],
+            'order_details' => ['GET' => 1, 'HEAD' => 1],
+            'orders' => ['GET' => 1, 'POST' => 1, 'PUT' => 1, 'PATCH' => 1, 'HEAD' => 1],
         ];
 
         WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);
