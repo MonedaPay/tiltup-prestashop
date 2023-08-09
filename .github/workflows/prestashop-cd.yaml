@@ -27,7 +27,7 @@ jobs:
     environment: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
     env:
       env-name: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
-      app-name: prestashop
+      app-name: tiltup-prestashop
     steps:
       - uses: actions/checkout@v3
         with:
@@ -55,12 +55,26 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Build Prestashop image
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Verify if this SHA image exists
         shell: bash
-        working-directory: .
+        run: |
+          set +e
+          aws ecr describe-images --repository-name=${{env.app-name}}-${{env.env-name}} --image-ids=imageTag="${GITVERSION_FULLSEMVER}"
+          echo "IMAGE_EXISTS=$?" >> $GITHUB_ENV
+          set -e
+
+      - name: Create docker image
+        shell: bash
+        if: ${{ env.IMAGE_EXISTS != 0 }}
         run: |
           source ~/.bashrc
-          docker build --build-arg CI=true --build-arg GIT_SHA=${GITHUB_SHA} . -t tiltup-presta:fresh -f ./Dockerfile
+          docker build --build-arg GIT_SHA=${GITHUB_SHA} . -t ${{env.app-name}}-${{env.env-name}}
+          docker tag ${{env.app-name}}-${{env.env-name}} "${{ secrets.ECR_HOST }}/${{env.app-name}}-${{env.env-name}}:${GITVERSION_FULLSEMVER}"
+          docker push "${{ secrets.ECR_HOST }}/${{env.app-name}}-${{env.env-name}}:${GITVERSION_FULLSEMVER}"
 
       - name: Deploy on ${{env.env-name}} EKS Cluster
         shell: bash

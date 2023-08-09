@@ -193,7 +193,7 @@ spec:
               value: "1"
             - name: PS_ENABLE_SSL
               value: "1"
-          image: tiltup-presta:fresh
+          image: ${ECR_HOST}/tiltup-prestashop-${NODE_ENV}:${GITVERSION_FULLSEMVER}
           name: prestashop
           imagePullPolicy: Never
           ports:
