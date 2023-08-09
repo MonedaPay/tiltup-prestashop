@@ -95,4 +95,4 @@ jobs:
             envsubst < $f | kubectl apply -n ${{env.env-name}} -f -
           done
           
-          kubectl rollout status deployment ${{env.app-name}} -n ${{env.env-name}} --timeout=180s
+          kubectl rollout status deployment prestashop -n ${{env.env-name}} --timeout=180s
