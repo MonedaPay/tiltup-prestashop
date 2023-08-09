@@ -16,7 +16,8 @@ services:
 
   prestashop:
     container_name: prestashop
-    image: prestashop/prestashop:1.7.8.9-7.4-apache
+    build:
+      dockerfile: ./local.Dockerfile
     restart: unless-stopped
     depends_on:
       - mysql
@@ -31,10 +32,12 @@ services:
       PS_DOMAIN: localhost:8080
       PS_DEV_MODE: 1
       PS_FOLDER_INSTALL: install-dev
+      PS_FOLDER_ADMIN: admin-dev
     networks:
       - prestashop_network
     volumes:
       - psdata:/var/www/html
+      - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - type: bind
         source: ./module
         target: /var/www/html/modules/tiltupcryptopaymentsmodule

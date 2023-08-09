@@ -55,6 +55,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      - name: Build Prestashop image
+        shell: bash
+        working-directory: .
+        run: |
+          source ~/.bashrc
+          docker build --build-arg CI=true --build-arg GIT_SHA=${GITHUB_SHA} . -t tiltup-presta -f ./Dockerfile
+
       - name: Deploy on ${{env.env-name}} EKS Cluster
         shell: bash
         env:
