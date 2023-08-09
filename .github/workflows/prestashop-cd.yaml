@@ -3,7 +3,7 @@ run-name: ${{ (github.head_ref =='' && 'manual') || github.head_ref}} -> ${{ (in
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [ closed, opened, edited, synchronize, reopened ]
 
   workflow_dispatch:
     inputs:
@@ -60,7 +60,7 @@ jobs:
         working-directory: .
         run: |
           source ~/.bashrc
-          docker build --build-arg CI=true --build-arg GIT_SHA=${GITHUB_SHA} . -t tiltup-presta -f ./Dockerfile
+          docker build --build-arg CI=true --build-arg GIT_SHA=${GITHUB_SHA} . -t tiltup-presta:fresh -f ./Dockerfile
 
       - name: Deploy on ${{env.env-name}} EKS Cluster
         shell: bash
