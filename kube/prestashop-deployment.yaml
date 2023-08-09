@@ -54,7 +54,7 @@ spec:
             - name: MYSQL_DATABASE
               value: prestashop
             - name: MYSQL_ROOT_PASSWORD
-              value: admin
+              value: tiltupadmin1
           image: mysql:5.7
           name: mysql
           ports:
@@ -157,7 +157,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: prestashop
-  name: prestashop
+  name: tiltup-prestashop
 spec:
   replicas: 1
   selector:
@@ -178,7 +178,7 @@ spec:
       containers:
         - env:
             - name: DB_PASSWD
-              value: admin
+              value: tiltupadmin1
             - name: DB_SERVER
               value: mysql
             - name: PS_DEV_MODE
@@ -193,6 +193,10 @@ spec:
               value: "1"
             - name: PS_ENABLE_SSL
               value: "1"
+            - name: ADMIN_MAIL
+              value: "test@tiltup.io"
+            - name: ADMIN_PASSWD
+              value: "tiltupadmin1"
           image: ${ECR_HOST}/tiltup-prestashop-${NODE_ENV}:${GITVERSION_FULLSEMVER}
           name: prestashop
           ports:
