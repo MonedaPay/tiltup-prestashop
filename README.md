@@ -19,9 +19,19 @@ TiltUp Prestashop plugin
 ## Bootstrapping the application
 
 1. `composer up` will spin up a Dockerized MariaDB & Prestashop instance.
-2. Navigate to `localhost:8080` to access your shop.
-3. The repo folder is mounted onto the Prestashop container (aka hot reload), so all your changes will be immediately
+2. The repo folder is mounted onto the Prestashop container (aka hot reload), so all your changes will be immediately
    reflected in the shop.
+3. Navigate to `localhost:8080` to access your shop.
+4. Navigate to `localhost:8080/admin-dev` to access admin panel.
+
+## Debugging
+
+### IntelliJ IDEA
+
+1. Install the official PHP Plugin.
+2. The local container already comes with Xdebug enabled, so no extra config needed.
+3. Setup server and path mappings as follows:![img.png](readme-local-intellij-debug-setup.png)
+4. Click `Start listening to PHP Debug Connections` to start debugging.
 
 ## Prestashop
 

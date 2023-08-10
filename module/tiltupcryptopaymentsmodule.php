@@ -1,20 +1,24 @@
 <?php
 
-
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
 class TiltUpCryptoPaymentsModule extends PaymentModule
 {
     const MERCHANT_ID_CONFIG = 'TILTUP_MERCHANT_ID';
     const SHOP_ID_CONFIG = 'TILTUP_SHOP_ID';
-    const IS_STAGING_CONFIG = 'IS_STAGING';
-    const AWAITING_CRYPTO_ORDER_STATUS_CONFIG = 'AWAITING_CRYPTO_ORDER_STATUS';
+    const IS_STAGING_CONFIG = 'TILTUP_IS_STAGING';
+    const AWAITING_CRYPTO_ORDER_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_ORDER_STATUS';
+    const ENCRYPTION_KEY_CONFIG = 'TILTUP_ENCRYPTION_KEY';
+
     const TILTUP_ECOMMERCE_TYPE = 'PRESTASHOP';
+
+    const CONFIRM_CONTROLLER = 'confirm';
+    const CANCEL_CONTROLLER = 'cancel';
+    const VALIDATE_CONTROLLER = 'validate';
 
     public function __construct()
     {
@@ -30,7 +34,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $this->bootstrap = true;
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
-        $this->controllers = ['redirect'];
+        $this->controllers = [self::CONFIRM_CONTROLLER, self::CANCEL_CONTROLLER, self::VALIDATE_CONTROLLER];
 
         parent::__construct();
 
@@ -40,16 +44,24 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
     }
 
-    public function install()
+    public function install(): bool
     {
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
         }
 
         return (
-            parent::install() && $this->enableWebServices() && $this->registerHook('paymentOptions') && $this->registerHook('displayPaymentReturn')
-            && $this->installOrderState()
+            parent::install() && $this->enableWebServices() && $this->registerHook('paymentOptions')
+            && $this->registerHook('displayPaymentReturn') && $this->installOrderState()
         );
+    }
+
+    public function uninstall(): bool
+    {
+        return Configuration::deleteByName(static::MERCHANT_ID_CONFIG)
+            && Configuration::deleteByName(static::SHOP_ID_CONFIG)
+            && Configuration::deleteByName(static::IS_STAGING_CONFIG)
+            && Configuration::deleteByName(static::ENCRYPTION_KEY_CONFIG);
     }
 
 
@@ -67,16 +79,18 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             $merchantId = (string)Tools::getValue(self::MERCHANT_ID_CONFIG);
             $shopId = (string)Tools::getValue(self::SHOP_ID_CONFIG);
             $isStaging = (bool)Tools::getValue(self::IS_STAGING_CONFIG);
+            $encryptionKey = (string)Tools::getValue(self::ENCRYPTION_KEY_CONFIG);
 
             // check that the value is valid
-            if (empty($merchantId) || !Validate::isGenericName($merchantId)) {
+            if (empty($merchantId) || empty($shopId) || empty($encryptionKey)) {
                 // invalid value, show an error
-                $output = $this->displayError($this->l('Invalid Configuration value'));
+                $output = $this->displayError($this->l('Not all configuration items filled'));
             } else {
                 // value is ok, update it and display a confirmation message
                 Configuration::updateValue(self::MERCHANT_ID_CONFIG, $merchantId);
                 Configuration::updateValue(self::SHOP_ID_CONFIG, $shopId);
                 Configuration::updateValue(self::IS_STAGING_CONFIG, $isStaging);
+                Configuration::updateValue(self::ENCRYPTION_KEY_CONFIG, $isStaging);
 
                 $output = $this->displayConfirmation($this->l('Settings updated'));
             }
@@ -109,6 +123,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                         'type' => 'text',
                         'label' => $this->l('TiltUp Shop ID'),
                         'name' => self::SHOP_ID_CONFIG,
+                        'size' => 32,
+                        'required' => true,
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->l('Encryption Secret'),
+                        'name' => self::ENCRYPTION_KEY_CONFIG,
                         'size' => 32,
                         'required' => true,
                     ],
@@ -156,6 +177,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $helper->fields_value[self::MERCHANT_ID_CONFIG] = Tools::getValue(self::MERCHANT_ID_CONFIG, Configuration::get(self::MERCHANT_ID_CONFIG));
         $helper->fields_value[self::SHOP_ID_CONFIG] = Tools::getValue(self::SHOP_ID_CONFIG, Configuration::get(self::SHOP_ID_CONFIG));
         $helper->fields_value[self::IS_STAGING_CONFIG] = Tools::getValue(self::IS_STAGING_CONFIG, Configuration::get(self::IS_STAGING_CONFIG));
+        $helper->fields_value[self::ENCRYPTION_KEY_CONFIG] = Tools::getValue(self::ENCRYPTION_KEY_CONFIG, Configuration::get(self::ENCRYPTION_KEY_CONFIG));
 
         return $helper->generateForm([$form]);
     }
@@ -274,8 +296,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->createAwaitingCryptoOrderState(
             self::AWAITING_CRYPTO_ORDER_STATUS_CONFIG,
             [
-                'en' => 'Awaiting crypto payment',
-                'fr' => 'En attente de paiement en crypto',
+                'en' => 'Waiting for TiltUp crypto payment',
             ],
             '#E5C143'
         );
@@ -324,6 +345,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         );
         if (false === $result) {
             $this->_errors[] = sprintf('Failed to save OrderState %s to Configuration', $configurationKey);
+
             return false;
         }
 
@@ -358,12 +380,26 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
         $env = Configuration::get(self::IS_STAGING_CONFIG) ? 'staging' : 'app';
+        $callbackUrl = $this->buildReturnUrl($merchantOrderId, 'confirm');
+        $cancelUrl = $this->buildReturnUrl($merchantOrderId, 'cancel');
 
         return 'https://payment.' . $env . '.tiltup.io/ecommerce/' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
                 'merchantOrderId' => $merchantOrderId,
-                'type' => self::TILTUP_ECOMMERCE_TYPE
+                'type' => self::TILTUP_ECOMMERCE_TYPE,
+                'callbackUrl' => $callbackUrl,
+                'cancelUrl' => $cancelUrl,
             ]);
+    }
+
+    /**
+     * @param string $merchantOrderId
+     * @param string $controllerName
+     * @return void
+     */
+    private function buildReturnUrl(string $merchantOrderId, string $controllerName): string
+    {
+        return $this->context->link->getModuleLink($this->name, $controllerName, ['orderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group], true);
     }
 }
