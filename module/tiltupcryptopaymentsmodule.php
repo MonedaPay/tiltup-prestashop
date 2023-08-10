@@ -10,7 +10,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 {
     const MERCHANT_ID_CONFIG = 'TILTUP_MERCHANT_ID';
     const SHOP_ID_CONFIG = 'TILTUP_SHOP_ID';
-    const IS_STAGING_CONFIG = 'TILTUP_IS_STAGING';
+    const TILTUP_ENV_CONFIG = 'TILTUP_ENV';
     const AWAITING_CRYPTO_ORDER_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_ORDER_STATUS';
     const ENCRYPTION_KEY_CONFIG = 'TILTUP_ENCRYPTION_KEY';
 
@@ -60,7 +60,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     {
         return Configuration::deleteByName(static::MERCHANT_ID_CONFIG)
             && Configuration::deleteByName(static::SHOP_ID_CONFIG)
-            && Configuration::deleteByName(static::IS_STAGING_CONFIG)
+            && Configuration::deleteByName(static::TILTUP_ENV_CONFIG)
             && Configuration::deleteByName(static::ENCRYPTION_KEY_CONFIG);
     }
 
@@ -78,19 +78,19 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             // retrieve the value set by the user
             $merchantId = (string)Tools::getValue(self::MERCHANT_ID_CONFIG);
             $shopId = (string)Tools::getValue(self::SHOP_ID_CONFIG);
-            $isStaging = (bool)Tools::getValue(self::IS_STAGING_CONFIG);
+            $env = (string)Tools::getValue(self::TILTUP_ENV_CONFIG);
             $encryptionKey = (string)Tools::getValue(self::ENCRYPTION_KEY_CONFIG);
 
             // check that the value is valid
             if (empty($merchantId) || empty($shopId) || empty($encryptionKey)) {
                 // invalid value, show an error
-                $output = $this->displayError($this->l('Not all configuration items filled'));
+                $output = $this->displayError($this->l('Mandatory TiltUp configuration items missing'));
             } else {
                 // value is ok, update it and display a confirmation message
                 Configuration::updateValue(self::MERCHANT_ID_CONFIG, $merchantId);
                 Configuration::updateValue(self::SHOP_ID_CONFIG, $shopId);
-                Configuration::updateValue(self::IS_STAGING_CONFIG, $isStaging);
-                Configuration::updateValue(self::ENCRYPTION_KEY_CONFIG, $isStaging);
+                Configuration::updateValue(self::TILTUP_ENV_CONFIG, $env);
+                Configuration::updateValue(self::ENCRYPTION_KEY_CONFIG, $encryptionKey);
 
                 $output = $this->displayConfirmation($this->l('Settings updated'));
             }
@@ -134,25 +134,21 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                         'required' => true,
                     ],
                     [
-                        'type' => 'radio',
-                        'label' => $this->l('Staging Mode'),
-                        'name' => self::IS_STAGING_CONFIG,
-                        'is_bool' => true,
-                        'class' => 't',
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            ]
-                        ],
-                        'required' => false,
-                    ],
+                        'type' => 'select',                              // This is a <select> tag.
+                        'label' => $this->l('TiltUp Environment:'),         // The <label> for this <select> tag.
+                        'desc' => $this->l('For testing purposes, select "Staging"'),  // A help text, displayed right next to the <select> tag.
+                        'name' => self::TILTUP_ENV_CONFIG,                     // The content of the 'id' attribute of the <select> tag.
+                        'required' => false,                              // If set to true, this option must be set.
+                        'options' => array(
+                            'query' => [
+                                ['id' => 'app', 'name' => 'Production'],                             // The value of the 'id' attribute of the <option> tag.
+                                ['id' => 'dev', 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
+                                ['id' => 'staging', 'name' => 'Staging'],                             // The value of the 'id' attribute of the <option> tag., 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
+                            ],                           // $options contains the data itself.
+                            'id' => 'id',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
+                            'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
+                        )
+                    ]
                 ],
                 'submit' => [
                     'title' => $this->l('Save'),
@@ -176,7 +172,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         // Load current value into the form
         $helper->fields_value[self::MERCHANT_ID_CONFIG] = Tools::getValue(self::MERCHANT_ID_CONFIG, Configuration::get(self::MERCHANT_ID_CONFIG));
         $helper->fields_value[self::SHOP_ID_CONFIG] = Tools::getValue(self::SHOP_ID_CONFIG, Configuration::get(self::SHOP_ID_CONFIG));
-        $helper->fields_value[self::IS_STAGING_CONFIG] = Tools::getValue(self::IS_STAGING_CONFIG, Configuration::get(self::IS_STAGING_CONFIG));
+        $helper->fields_value[self::TILTUP_ENV_CONFIG] = Tools::getValue(self::TILTUP_ENV_CONFIG, Configuration::get(self::TILTUP_ENV_CONFIG));
         $helper->fields_value[self::ENCRYPTION_KEY_CONFIG] = Tools::getValue(self::ENCRYPTION_KEY_CONFIG, Configuration::get(self::ENCRYPTION_KEY_CONFIG));
 
         return $helper->generateForm([$form]);
@@ -339,7 +335,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             $this->_errors[] = sprintf('Failed to create OrderState %s', $configurationKey);
             return false;
         }
-        $result = (bool)Configuration::updateGlobalValue(
+        $result = Configuration::updateGlobalValue(
             $configurationKey,
             (int)$orderState->id
         );
@@ -379,7 +375,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     {
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
-        $env = Configuration::get(self::IS_STAGING_CONFIG) ? 'staging' : 'app';
+        $env = Configuration::get(self::TILTUP_ENV_CONFIG);
         $callbackUrl = $this->buildReturnUrl($merchantOrderId, 'confirm');
         $cancelUrl = $this->buildReturnUrl($merchantOrderId, 'cancel');
 
