@@ -224,7 +224,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         }
 
 
-        $merchantOrderId = $params['order']->reference;
+        $merchantOrderId = $params['order']->id;
         $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($merchantOrderId);
 
         $totalAmount = $params['order']->getOrdersTotalPaid();
