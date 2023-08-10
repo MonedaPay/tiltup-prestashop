@@ -43,3 +43,7 @@ The module is installed by a post-install script. However, it can also be instal
 php bin/console prestashop:module install tiltupcryptopaymentsmodule
 ```
 
+### Module configuration
+
+1. Navigate to Admin -> Modules -> Module Manager.
+2. Search for `tiltup` and click `Configure`.
