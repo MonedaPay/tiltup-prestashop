@@ -41,12 +41,13 @@ class TiltUpCryptoPaymentsModuleValidateModuleFrontController extends ModuleFron
         $currency = $this->context->currency;
         $total = (float)$cart->getOrderTotal(true, Cart::BOTH);
         $mailVars = [];
-        $order_status_id = (int)Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::AWAITING_CRYPTO_ORDER_STATUS_CONFIG);
+        $orderStatusId =
+            (int)Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::AWAITING_CRYPTO_ORDER_STATUS_CONFIG);
 
         // This actually creates the order
         $this->module->validateOrder(
             (int)$cart->id,
-            $order_status_id,
+            $orderStatusId,
             $total,
             $this->module->displayName,
             null,
