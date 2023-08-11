@@ -12,7 +12,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
         $orderId = Tools::getValue('orderId');
 
         if (!EncryptionService::isValidHmac($orderId, $hmac)) {
-            die($this->module->l('Invalid TiltUp security token - unable to process payment request'));
+            Tools::redirect($this->context->link->getModuleLink($this->module->name, 'error', ['error' => $this->module->l('Invalid TiltUp security token - unable to process payment request')]));
         }
 
         $orderId = Tools::getValue('orderId');
