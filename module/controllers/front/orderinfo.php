@@ -16,6 +16,7 @@ class TiltUpCryptoPaymentsModuleOrderInfoModuleFrontController extends TiltUpFro
 
                 $res = [
                     'merchantOrderId' => $order->id,
+                    'merchantCustomerId' => $customer->id,
                     'fromCurrency' => $currency->iso_code,
                     'fromAmount' => $order->getOrdersTotalPaid(),
                     'email' => $customer->email,
