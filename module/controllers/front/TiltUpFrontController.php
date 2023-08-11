@@ -12,12 +12,13 @@ abstract class TiltUpFrontController extends ModuleFrontController
         $orderId = Tools::getValue('orderId');
 
         if (!EncryptionService::isValidHmac($orderId, $hmac)) {
-            die($this->module->l('Invalid TiltUp security token - unable to process payment request'));
+            Tools::redirect($this->context->link->getModuleLink($this->module->name, 'error', ['error' => $this->module->l('Invalid TiltUp security token - unable to process payment request')]));
         }
 
         $orderId = Tools::getValue('orderId');
 
         if (isset($orderId)) {
+            // TODO Check this is enough in multistore context.
             $order = new Order($orderId);
 
             if (Validate::isLoadedObject($order)) {
@@ -26,15 +27,23 @@ abstract class TiltUpFrontController extends ModuleFrontController
                 $this->handleOrderNotFound();
             }
         } else {
-            Tools::redirect($this->context->link->getPageLink(
-                'order',
-                false,
-                $this->context->language->id,
-                [
-                    'step' => 4,
-                ]
-            ));
+            $this->redirectToPaymentScreen();
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function redirectToPaymentScreen(): void
+    {
+        Tools::redirect($this->context->link->getPageLink(
+            'order',
+            false,
+            $this->context->language->id,
+            [
+                'step' => 4,
+            ]
+        ));
     }
 
     protected function updateOrderState(Order $order, int $newStateId)
