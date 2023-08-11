@@ -11,6 +11,10 @@ abstract class TiltUpFrontController extends ModuleFrontController
         $hmac = $this->getHmac();
         $orderId = Tools::getValue('orderId');
 
+        $this->context->smarty->assign([
+            'tu_base_dir' => $this->module->getPathUrl(),
+        ]);
+
         if (!EncryptionService::isValidHmac($orderId, $hmac)) {
             $this->handleInvalidToken();
         }
