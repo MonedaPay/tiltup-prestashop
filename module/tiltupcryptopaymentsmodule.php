@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/EncryptionService.php';
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
@@ -396,10 +398,10 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $callbackUrl = $this->buildReturnUrl($merchantOrderId, self::SUCCESS_CONTROLLER);
         $cancelUrl = $this->buildReturnUrl($merchantOrderId, self::CANCEL_CONTROLLER);
 
-        return 'https://payment.' . $env . '.tiltup.io/ecommerce/' . http_build_query([
+        return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
-                'merchantOrderId' => $merchantOrderId,
+                'orderId' => $merchantOrderId,
                 'type' => self::TILTUP_ECOMMERCE_TYPE,
                 'callbackUrl' => $callbackUrl,
                 'cancelUrl' => $cancelUrl,
