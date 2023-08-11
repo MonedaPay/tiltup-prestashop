@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/EncryptionService.php';
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
