@@ -11,12 +11,15 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     const MERCHANT_ID_CONFIG = 'TILTUP_MERCHANT_ID';
     const SHOP_ID_CONFIG = 'TILTUP_SHOP_ID';
     const TILTUP_ENV_CONFIG = 'TILTUP_ENV';
-    const AWAITING_CRYPTO_ORDER_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_ORDER_STATUS';
     const ENCRYPTION_KEY_CONFIG = 'TILTUP_ENCRYPTION_KEY';
+
+    const CRYPTO_PAYMENT_PENDING_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_PAYMENT_STATUS';
+    const CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_CANCELLED_STATUS';
+    const CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_COMPLETED_STATUS';
 
     const TILTUP_ECOMMERCE_TYPE = 'PRESTASHOP';
 
-    const CONFIRM_CONTROLLER = 'confirm';
+    const SUCCESS_CONTROLLER = 'success';
     const CANCEL_CONTROLLER = 'cancel';
     const VALIDATE_CONTROLLER = 'validate';
 
@@ -34,7 +37,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $this->bootstrap = true;
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
-        $this->controllers = [self::CONFIRM_CONTROLLER, self::CANCEL_CONTROLLER, self::VALIDATE_CONTROLLER];
+        $this->controllers = [self::SUCCESS_CONTROLLER, self::CANCEL_CONTROLLER, self::VALIDATE_CONTROLLER];
 
         parent::__construct();
 
@@ -52,7 +55,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         return (
             parent::install() && $this->enableWebServices() && $this->registerHook('paymentOptions')
-            && $this->registerHook('displayPaymentReturn') && $this->installOrderState()
+            && $this->registerHook('displayPaymentReturn') && $this->installOrderStates()
         );
     }
 
@@ -139,7 +142,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                         'desc' => $this->l('For testing purposes, select "Staging"'),  // A help text, displayed right next to the <select> tag.
                         'name' => self::TILTUP_ENV_CONFIG,                     // The content of the 'id' attribute of the <select> tag.
                         'required' => false,                              // If set to true, this option must be set.
-                        'options' => array(
+                        'options' => [
                             'query' => [
                                 ['id' => 'app', 'name' => 'Production'],                             // The value of the 'id' attribute of the <option> tag.
                                 ['id' => 'dev', 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
@@ -147,7 +150,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                             ],                           // $options contains the data itself.
                             'id' => 'id',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
                             'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
-                        )
+                        ]
                     ]
                 ],
                 'submit' => [
@@ -241,6 +244,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
     }
 
+    // TODO Add check for supported currencies
     private function checkCurrency($cart): bool
     {
         $currency_order = new Currency((int)($cart->
@@ -280,25 +284,37 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $wsEnabled;
     }
 
-    private function installOrderState(): bool
+    private function installOrderStates(): bool
     {
-        if (Configuration::getGlobalValue(self::AWAITING_CRYPTO_ORDER_STATUS_CONFIG)) {
-            $orderState = new OrderState((int)Configuration::getGlobalValue(self::AWAITING_CRYPTO_ORDER_STATUS_CONFIG));
+        return $this->installState(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#198754', false)
+            && $this->installState(self::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Cancelled'], '#dc3545', false)
+            && $this->installState(self::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
+    }
+
+    /**
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    public function installState(string $configKey, array $namesByLangCode, string $color, bool $isPaid): bool
+    {
+        if (Configuration::getGlobalValue($configKey)) {
+            $orderState = new OrderState((int)Configuration::getGlobalValue($configKey));
             if (Validate::isLoadedObject($orderState) && $this->name === $orderState->module_name) {
                 return true;
             }
         }
 
-        return $this->createAwaitingCryptoOrderState(
-            self::AWAITING_CRYPTO_ORDER_STATUS_CONFIG,
-            [
-                'en' => 'Waiting for TiltUp crypto payment',
-            ],
-            '#E5C143'
+        return $this->createTiltUpOrderState(
+            $configKey,
+            $namesByLangCode,
+            $color,
+            false,
+            $isPaid
         );
     }
 
-    private function createAwaitingCryptoOrderState($configurationKey, array $nameByLangIsoCode, $color, $isLogable = false, $isPaid = false, $isInvoice = false, $isShipped = false, $isDelivery = false, $isPdfDelivery = false, $isPdfInvoice = false, $isSendEmail = false, $template = '', $isHidden = false, $isUnremovable = true, $isDeleted = false): bool
+    private function createTiltUpOrderState($configurationKey, array $nameByLangIsoCode, $color, $isLogable = false, $isPaid = false, $isInvoice = false, $isShipped = false, $isDelivery = false, $isPdfDelivery = false, $isPdfInvoice = false, $isSendEmail = false, $template = '', $isHidden = false, $isUnremovable = true, $isDeleted = false): bool
     {
         $tabNameByLangId = [];
 
@@ -345,8 +361,9 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             return false;
         }
 
+        // TODO Add icons for all states.
         $orderStateImgPath = $this->getLocalPath() . 'views/img/orderstate/' . $configurationKey . '.png';
-        if (false === (bool)Tools::file_exists_cache($orderStateImgPath)) {
+        if (false === Tools::file_exists_cache($orderStateImgPath)) {
             $this->_errors[] = sprintf(
                 'Failed to find icon file of OrderState %s',
                 $configurationKey
@@ -376,8 +393,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
         $env = Configuration::get(self::TILTUP_ENV_CONFIG);
-        $callbackUrl = $this->buildReturnUrl($merchantOrderId, 'confirm');
-        $cancelUrl = $this->buildReturnUrl($merchantOrderId, 'cancel');
+        $callbackUrl = $this->buildReturnUrl($merchantOrderId, self::SUCCESS_CONTROLLER);
+        $cancelUrl = $this->buildReturnUrl($merchantOrderId, self::CANCEL_CONTROLLER);
 
         return 'https://payment.' . $env . '.tiltup.io/ecommerce/' . http_build_query([
                 'merchantId' => $merchantId,
@@ -396,6 +413,11 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
      */
     private function buildReturnUrl(string $merchantOrderId, string $controllerName): string
     {
-        return $this->context->link->getModuleLink($this->name, $controllerName, ['orderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group], true);
+        return $this->context->link->getModuleLink(
+            $this->name,
+            $controllerName,
+            ['orderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($merchantOrderId)],
+            true
+        );
     }
 }

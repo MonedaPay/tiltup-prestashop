@@ -49,7 +49,19 @@ The module is installed by a post-install script. However, it can also be instal
 php bin/console prestashop:module install tiltupcryptopaymentsmodule
 ```
 
+```shell
+php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
+```
+
 ### Module configuration
 
 1. Navigate to Admin -> Modules -> Module Manager.
 2. Search for `tiltup` and click `Configure`.
+
+## Useful links
+
+- [Presta docs](https://devdocs.prestashop-project.org/1.7/modules/creation/tutorial/)
+- [Official payment module skeleton](https://github.com/PrestaShop/paymentexample)
+- [Blumedia payment module](https://github.com/bluepayment-plugin/prestashop-plugin-1.7)
+- [PayU payment module](https://github.com/PayU-EMEA/plugin_prestashop)
+- [PayNow payment module](https://github.com/pay-now/paynow-prestashop)
