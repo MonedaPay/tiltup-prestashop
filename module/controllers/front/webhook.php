@@ -19,7 +19,7 @@ class TiltUpCryptoPaymentsModuleWebhookModuleFrontController extends TiltUpFront
     }
 
 
-    protected function handlePaymentUpdate(Order $order)
+    protected function handleRequest(Order $order)
     {
         $this->updateOrderState($order, (int)Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG));
         header('HTTP/1.1 200 OK', true, 200);

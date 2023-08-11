@@ -11,7 +11,7 @@ class TiltUpCryptoPaymentsModuleSuccessModuleFrontController extends TiltUpFront
         $this->setTemplate('module:tiltupcryptopaymentsmodule/views/templates/front/success.tpl');
     }
 
-    protected function handlePaymentUpdate(Order $order)
+    protected function handleRequest(Order $order)
     {
         // NOOP
     }

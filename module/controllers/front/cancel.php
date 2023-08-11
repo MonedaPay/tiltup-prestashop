@@ -11,7 +11,7 @@ class TiltUpCryptoPaymentsModuleCancelModuleFrontController extends TiltUpFrontC
         $this->setTemplate('module:tiltupcryptopaymentsmodule/views/templates/front/cancel.tpl');
     }
 
-    protected function handlePaymentUpdate(Order $order)
+    protected function handleRequest(Order $order)
     {
         $this->updateOrderState($order, (int)Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG));
     }
