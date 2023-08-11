@@ -62,14 +62,14 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: {}
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: dbdata
+#          volumeMounts:
+#            - mountPath: /var/lib/mysql
+#              name: dbdata
       restartPolicy: Always
-      volumes:
-        - name: dbdata
-          persistentVolumeClaim:
-            claimName: dbdata
+#      volumes:
+#        - name: dbdata
+#          persistentVolumeClaim:
+#            claimName: dbdata
 status: { }
 
 
@@ -188,84 +188,84 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/www/html
-              name: psdata
-            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-              name: tiltupcryptopaymentsmodule
+#          volumeMounts:
+#            - mountPath: /var/www/html
+#              name: psdata
+#            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+#              name: tiltupcryptopaymentsmodule
       restartPolicy: Always
-      volumes:
-        - name: psdata
-          persistentVolumeClaim:
-            claimName: psdata
-        - name: tiltupcryptopaymentsmodule
-          persistentVolumeClaim:
-            claimName: tiltupcryptopaymentsmodule
+#      volumes:
+#        - name: psdata
+#          persistentVolumeClaim:
+#            claimName: psdata
+#        - name: tiltupcryptopaymentsmodule
+#          persistentVolumeClaim:
+#            claimName: tiltupcryptopaymentsmodule
 status: { }
 
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: psdata
-  name: psdata
-
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: efs-sc
-  resources:
-    requests:
-      storage: 100Mi
-status: { }
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: tiltupcryptopaymentsmodule
-  name: tiltupcryptopaymentsmodule
-
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: efs-sc
-  resources:
-    requests:
-      storage: 100Mi
-status: { }
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: dbdata
-  name: dbdata
-
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: efs-sc
-  resources:
-    requests:
-      storage: 100Mi
-status: { }
-
----
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: efs-sc
-provisioner: efs.csi.aws.com
-parameters:
-  provisioningMode: efs-ap
-  fileSystemId: fs-082841beade663496
-  directoryPerms: "700"
-
-
+#
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    io.kompose.service: psdata
+#  name: psdata
+#
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  storageClassName: efs-sc
+#  resources:
+#    requests:
+#      storage: 100Mi
+#status: { }
+#
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    io.kompose.service: tiltupcryptopaymentsmodule
+#  name: tiltupcryptopaymentsmodule
+#
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  storageClassName: efs-sc
+#  resources:
+#    requests:
+#      storage: 100Mi
+#status: { }
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    io.kompose.service: dbdata
+#  name: dbdata
+#
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  storageClassName: efs-sc
+#  resources:
+#    requests:
+#      storage: 100Mi
+#status: { }
+#
+#---
+#kind: StorageClass
+#apiVersion: storage.k8s.io/v1
+#metadata:
+#  name: efs-sc
+#provisioner: efs.csi.aws.com
+#parameters:
+#  provisioningMode: efs-ap
+#  fileSystemId: fs-082841beade663496
+#  directoryPerms: "700"
+#
+#
