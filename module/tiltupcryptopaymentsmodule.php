@@ -398,7 +398,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $callbackUrl = $this->buildReturnUrl($merchantOrderId, self::SUCCESS_CONTROLLER);
         $cancelUrl = $this->buildReturnUrl($merchantOrderId, self::CANCEL_CONTROLLER);
 
-        return 'https://payment.' . $env . '.tiltup.io/ecommerce/' . http_build_query([
+        return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
                 'orderId' => $merchantOrderId,
