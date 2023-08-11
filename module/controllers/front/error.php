@@ -1,6 +1,6 @@
 <?php
 
-class TiltUpCryptoPaymentsModuleCancelModuleFrontController extends ModuleFrontController
+class TiltUpCryptoPaymentsModuleErrorModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {
@@ -9,6 +9,6 @@ class TiltUpCryptoPaymentsModuleCancelModuleFrontController extends ModuleFrontC
         $this->context->smarty->assign([
             'error' => Tools::getValue('error'),
         ]);
-        $this->setTemplate('module:tiltupcryptopayments/views/templates/front/error.tpl');
+        $this->setTemplate('module:tiltupcryptopaymentsmodule/views/templates/front/error.tpl');
     }
 }
