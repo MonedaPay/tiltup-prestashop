@@ -401,7 +401,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return 'https://payment.' . $env . '.tiltup.io/ecommerce/' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
-                'merchantOrderId' => $merchantOrderId,
+                'orderId' => $merchantOrderId,
                 'type' => self::TILTUP_ECOMMERCE_TYPE,
                 'callbackUrl' => $callbackUrl,
                 'cancelUrl' => $cancelUrl,
