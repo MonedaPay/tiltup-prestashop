@@ -30,7 +30,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
     }
 
     /**
-     * @return false|mixed
+     * @return string
      */
     protected function getHmac(): string
     {
