@@ -188,19 +188,19 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-          volumeMounts:
-            - mountPath: /var/www/html
-              name: psdata
-            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-              name: tiltupcryptopaymentsmodule
+#          volumeMounts:
+#            - mountPath: /var/www/html
+#              name: psdata
+#            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+#              name: tiltupcryptopaymentsmodule
       restartPolicy: Always
-      volumes:
-        - name: psdata
-          persistentVolumeClaim:
-            claimName: psdata
-        - name: tiltupcryptopaymentsmodule
-          persistentVolumeClaim:
-            claimName: tiltupcryptopaymentsmodule
+#      volumes:
+#        - name: psdata
+#          persistentVolumeClaim:
+#            claimName: psdata
+#        - name: tiltupcryptopaymentsmodule
+#          persistentVolumeClaim:
+#            claimName: tiltupcryptopaymentsmodule
 status: { }
 
 
