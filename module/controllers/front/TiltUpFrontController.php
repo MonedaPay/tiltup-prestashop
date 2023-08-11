@@ -15,8 +15,6 @@ abstract class TiltUpFrontController extends ModuleFrontController
             Tools::redirect($this->context->link->getModuleLink($this->module->name, 'error', ['error' => $this->module->l('Invalid TiltUp security token - unable to process payment request')]));
         }
 
-        $orderId = Tools::getValue('orderId');
-
         if (isset($orderId)) {
             // TODO Check this is enough in multistore context.
             $order = new Order($orderId);
