@@ -34,9 +34,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
      */
     protected function getHmac(): string
     {
-        $hmac = Tools::getValue('hmac');
-
-        return $hmac;
+        return Tools::getValue('hmac') ?? '';
     }
 
     /**
