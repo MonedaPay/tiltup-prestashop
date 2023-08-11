@@ -412,6 +412,11 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
      */
     private function buildReturnUrl(string $merchantOrderId, string $controllerName): string
     {
-        return $this->context->link->getModuleLink($this->name, $controllerName, ['orderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group], true);
+        return $this->context->link->getModuleLink(
+            $this->name,
+            $controllerName,
+            ['orderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($merchantOrderId)],
+            true
+        );
     }
 }
