@@ -62,14 +62,14 @@ spec:
               hostPort: 3306
               protocol: TCP
           resources: {}
-#          volumeMounts:
-#            - mountPath: /var/lib/mysql
-#              name: dbdata
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: dbdata
       restartPolicy: Always
-#      volumes:
-#        - name: dbdata
-#          persistentVolumeClaim:
-#            claimName: dbdata
+      volumes:
+        - name: dbdata
+          persistentVolumeClaim:
+            claimName: dbdata
 status: { }
 
 
