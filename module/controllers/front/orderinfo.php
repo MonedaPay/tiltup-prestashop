@@ -1,14 +1,9 @@
 <?php
 
-class TiltUpCryptoPaymentsModuleOrderInfoModuleFrontController extends TiltUpFrontController
+require_once __DIR__ . '/TiltUpFrontWebhookController.php';
+
+class TiltUpCryptoPaymentsModuleOrderInfoModuleFrontController extends TiltUpFrontWebhookController
 {
-    protected function handleOrderNotFound(): void
-    {
-        header('HTTP/1.1 404 Not Found', true, 404);
-
-        exit;
-    }
-
     protected function handleRequest(Order $order)
     {
         $customer = new Customer($order->id_customer);
@@ -20,8 +15,12 @@ class TiltUpCryptoPaymentsModuleOrderInfoModuleFrontController extends TiltUpFro
                 header('Content-Type: application/json; charset=utf-8');
 
                 $res = [
-                    'orderId' => $order->id,
+                    'merchantOrderId' => $order->id,
                     'fromCurrency' => $currency->iso_code,
+                    'fromAmount' => $order->getOrdersTotalPaid(),
+                    'email' => $customer->email,
+                    'firstName' => $customer->firstname,
+                    'lastName' => $customer->lastname,
                 ];
 
                 echo json_encode($res);
