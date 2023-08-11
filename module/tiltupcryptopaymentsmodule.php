@@ -142,7 +142,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                         'desc' => $this->l('For testing purposes, select "Staging"'),  // A help text, displayed right next to the <select> tag.
                         'name' => self::TILTUP_ENV_CONFIG,                     // The content of the 'id' attribute of the <select> tag.
                         'required' => false,                              // If set to true, this option must be set.
-                        'options' => array(
+                        'options' => [
                             'query' => [
                                 ['id' => 'app', 'name' => 'Production'],                             // The value of the 'id' attribute of the <option> tag.
                                 ['id' => 'dev', 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
@@ -150,7 +150,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
                             ],                           // $options contains the data itself.
                             'id' => 'id',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
                             'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
-                        )
+                        ]
                     ]
                 ],
                 'submit' => [
@@ -244,6 +244,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
     }
 
+    // TODO Add check for supported currencies
     private function checkCurrency($cart): bool
     {
         $currency_order = new Currency((int)($cart->
