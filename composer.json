@@ -13,7 +13,8 @@
   ],
   "minimum-stability": "dev",
   "scripts": {
-    "up": "docker compose up -d",
+    "up": "docker compose build --no-cache && docker compose up -d",
+    "up:xdebug": "docker compose build --no-cache --build-arg xdebug=1 && docker compose up -d",
     "down": "docker compose down --remove-orphans",
     "down:volumes": "docker compose down --remove-orphans -v"
   },
