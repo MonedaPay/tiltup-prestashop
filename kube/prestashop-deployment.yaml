@@ -188,84 +188,129 @@ spec:
               hostPort: 80
               protocol: TCP
           resources: { }
-#          volumeMounts:
-#            - mountPath: /var/www/html
-#              name: psdata
-#            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
-#              name: tiltupcryptopaymentsmodule
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: psdata
+            - mountPath: /var/www/html/modules/tiltupcryptopaymentsmodule
+              name: tiltupcryptopaymentsmodule
       restartPolicy: Always
-#      volumes:
-#        - name: psdata
-#          persistentVolumeClaim:
-#            claimName: psdata
-#        - name: tiltupcryptopaymentsmodule
-#          persistentVolumeClaim:
-#            claimName: tiltupcryptopaymentsmodule
+      volumes:
+        - name: psdata
+          persistentVolumeClaim:
+            claimName: psdata
+        - name: tiltupcryptopaymentsmodule
+          persistentVolumeClaim:
+            claimName: tiltupcryptopaymentsmodule
 status: { }
 
-#
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: psdata
-#  name: psdata
-#
-#spec:
-#  accessModes:
-#    - ReadWriteMany
-#  storageClassName: efs-sc
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-#
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: tiltupcryptopaymentsmodule
-#  name: tiltupcryptopaymentsmodule
-#
-#spec:
-#  accessModes:
-#    - ReadWriteMany
-#  storageClassName: efs-sc
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  creationTimestamp: null
-#  labels:
-#    io.kompose.service: dbdata
-#  name: dbdata
-#
-#spec:
-#  accessModes:
-#    - ReadWriteMany
-#  storageClassName: efs-sc
-#  resources:
-#    requests:
-#      storage: 100Mi
-#status: { }
-#
-#---
-#kind: StorageClass
-#apiVersion: storage.k8s.io/v1
-#metadata:
-#  name: efs-sc
-#provisioner: efs.csi.aws.com
-#parameters:
-#  provisioningMode: efs-ap
-#  fileSystemId: fs-082841beade663496
-#  directoryPerms: "700"
-#
-#
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: psdata
+  name: psdata
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 500Mi
+status: { }
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tiltupcryptopaymentsmodule
+  name: tiltupcryptopaymentsmodule
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 500Mi
+status: { }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dbdata
+  name: dbdata
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 500Mi
+status: { }
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-tiltupcryptopaymentsmodule
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: dev
+    name: tiltupcryptopaymentsmodule
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-082841beade663496
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-psdata
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: dev
+    name: psdata
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-082841beade663496
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-mysql
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: dev
+    name: dbdata
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-082841beade663496
