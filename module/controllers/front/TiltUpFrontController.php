@@ -25,6 +25,15 @@ abstract class TiltUpFrontController extends ModuleFrontController
             } else {
                 $this->handleOrderNotFound();
             }
+        } else {
+            Tools::redirect($this->context->link->getPageLink(
+                'order',
+                false,
+                $this->context->language->id,
+                [
+                    'step' => 4,
+                ]
+            ));
         }
     }
 
