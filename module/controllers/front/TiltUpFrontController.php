@@ -8,11 +8,11 @@ abstract class TiltUpFrontController extends ModuleFrontController
     {
         parent::postProcess();
 
-        $hmac = Tools::getValue('hmac');
+        $hmac = $this->getHmac();
         $orderId = Tools::getValue('orderId');
 
         if (!EncryptionService::isValidHmac($orderId, $hmac)) {
-            Tools::redirect($this->context->link->getModuleLink($this->module->name, 'error', ['error' => $this->module->l('Invalid TiltUp security token - unable to process payment request')]));
+            $this->handleInvalidToken();
         }
 
         if (isset($orderId)) {
@@ -30,6 +30,16 @@ abstract class TiltUpFrontController extends ModuleFrontController
     }
 
     /**
+     * @return false|mixed
+     */
+    protected function getHmac(): string
+    {
+        $hmac = Tools::getValue('hmac');
+
+        return $hmac;
+    }
+
+    /**
      * @return void
      */
     public function redirectToPaymentScreen(): void
@@ -42,6 +52,14 @@ abstract class TiltUpFrontController extends ModuleFrontController
                 'step' => 4,
             ]
         ));
+    }
+
+    /**
+     * @return void
+     */
+    protected function handleInvalidToken(): void
+    {
+        Tools::redirect($this->context->link->getModuleLink($this->module->name, 'error', ['error' => $this->module->l('Invalid TiltUp security token - unable to process payment request')]));
     }
 
     protected function updateOrderState(Order $order, int $newStateId)
