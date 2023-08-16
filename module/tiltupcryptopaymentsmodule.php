@@ -260,7 +260,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     private function installOrderStates(): bool
     {
-        return $this->installState(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#198754', false)
+        return $this->installState(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#ffc107', false)
             && $this->installState(self::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Cancelled'], '#dc3545', false)
             && $this->installState(self::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
     }
