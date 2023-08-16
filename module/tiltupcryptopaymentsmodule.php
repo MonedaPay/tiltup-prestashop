@@ -260,7 +260,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     private function installOrderStates(): bool
     {
-        return $this->installState(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#198754', false)
+        return $this->installState(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#ffc107', false)
             && $this->installState(self::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Cancelled'], '#dc3545', false)
             && $this->installState(self::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
     }
@@ -381,16 +381,16 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     }
 
     /**
-     * @param string $merchantOrderId
+     * @param string $orderId
      * @param string $controllerName
      * @return void
      */
-    private function buildReturnUrl(string $merchantOrderId, string $controllerName): string
+    private function buildReturnUrl(string $orderId, string $controllerName): string
     {
         return $this->context->link->getModuleLink(
             $this->name,
             $controllerName,
-            ['merchantOrderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($merchantOrderId)],
+            ['orderId' => $orderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($orderId)],
             true
         );
     }
