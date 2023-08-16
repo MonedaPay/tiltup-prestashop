@@ -228,19 +228,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             return;
         }
 
-
         $merchantOrderId = $params['order']->id;
-        $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($merchantOrderId);
+        $customer = new Customer($params['order']->id_customer);
+        $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($merchantOrderId, $params['order']->reference, $customer->email);
 
         $totalAmount = $params['order']->getOrdersTotalPaid();
         $this->smarty->assign([
-            'totalAmount' => $this->context->getCurrentLocale()->formatPrice(
-                $totalAmount,
-                (new Currency($params['order']->id_currency))->
-                iso_code
-            ),
-            'tiltUpRedirectUrl' => $tiltUpRedirectUrl,
-            'orderId' => $merchantOrderId
+            'tiltUpRedirectUrl' => $tiltUpRedirectUrl
         ]);
 
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
@@ -365,21 +359,21 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     }
 
     /**
-     * @param $merchantOrderId
+     * @param $orderId
      * @return string
      */
-    private function buildTiltUpRedirectUrl($merchantOrderId): string
+    private function buildTiltUpRedirectUrl(string $orderId, string $orderReference, string $customerEmail): string
     {
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
         $env = Configuration::get(self::TILTUP_ENV_CONFIG);
-        $callbackUrl = $this->buildReturnUrl($merchantOrderId, self::SUCCESS_CONTROLLER);
-        $cancelUrl = $this->buildReturnUrl($merchantOrderId, self::CANCEL_CONTROLLER);
+        $callbackUrl = $this->buildCallbackUrl($orderReference, $customerEmail);
+        $cancelUrl = $this->buildReturnUrl($orderId, self::CANCEL_CONTROLLER);
 
         return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
-                'orderId' => $merchantOrderId,
+                'merchantOrderId' => $orderId,
                 'type' => self::TILTUP_ECOMMERCE_TYPE,
                 'callbackUrl' => $callbackUrl,
                 'cancelUrl' => $cancelUrl,
@@ -399,5 +393,18 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             ['merchantOrderId' => $merchantOrderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($merchantOrderId)],
             true
         );
+    }
+
+    /**
+     * @param string $orderReference
+     * @param string $customerEmail
+     * @return void
+     */
+    private function buildCallbackUrl(string $orderReference, string $customerEmail): string
+    {
+        return $this->context->link->getPageLink('guest-tracking', null, null, [
+            'order_reference' => $orderReference,
+            'email' => $customerEmail
+        ]);
     }
 }
