@@ -56,7 +56,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         }
 
         return (
-            parent::install() && $this->enableWebServices() && $this->registerHook('paymentOptions')
+            parent::install() && $this->registerHook('paymentOptions')
             && $this->registerHook('displayPaymentReturn') && $this->installOrderStates()
         );
     }
@@ -262,28 +262,6 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         }
 
         return false;
-    }
-
-    private function enableWebServices(): bool
-    {
-        $wsEnabled = Configuration::updateValue('PS_WEBSERVICE', 1);
-        $apiAccess = new WebserviceKey();
-        $apiAccess->key = bin2hex(random_bytes(16));
-        $apiAccess->description = 'TILTUP WEBHOOK ACCESS KEY';
-        $apiAccess->save();
-
-        $permissions = [
-            'customers' => ['GET' => 1, 'HEAD' => 1],
-            'shops' => ['GET' => 1, 'HEAD' => 1],
-            'currencies' => ['GET' => 1, 'HEAD' => 1],
-            'order_states' => ['GET' => 1, 'HEAD' => 1],
-            'order_details' => ['GET' => 1, 'HEAD' => 1],
-            'orders' => ['GET' => 1, 'POST' => 1, 'PUT' => 1, 'PATCH' => 1, 'HEAD' => 1],
-        ];
-
-        WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);
-
-        return $wsEnabled;
     }
 
     private function installOrderStates(): bool

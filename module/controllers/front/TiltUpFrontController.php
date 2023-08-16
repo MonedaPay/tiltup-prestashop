@@ -20,7 +20,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
             $order = new Order($orderId);
 
             if (Validate::isLoadedObject($order)) {
-                $this->handlePaymentUpdate($order);
+                $this->handleRequest($order);
             } else {
                 $this->handleOrderNotFound();
             }
@@ -28,6 +28,8 @@ abstract class TiltUpFrontController extends ModuleFrontController
             $this->redirectToPaymentScreen();
         }
     }
+
+    abstract protected function handleRequest(Order $order);
 
     /**
      * @return string
