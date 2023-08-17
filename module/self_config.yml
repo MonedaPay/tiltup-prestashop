@@ -1,0 +1,11 @@
+# FOR DEV PURPOSES ONLY!
+
+configuration:
+  update:
+    TILTUP_MERCHANT_ID: "1c74881e-868e-4c06-b689-3510e353f40f"
+    TILTUP_SHOP_ID: "35515f8d-8f71-4711-b4bc-edd19c5164be"
+    TILTUP_ENV: "dev"
+    TILTUP_ENCRYPTION_KEY: "mysecret"
+
+sql:
+  - "extra_config.sql"
