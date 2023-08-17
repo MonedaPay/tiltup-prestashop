@@ -20,13 +20,16 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     const CRYPTO_PAYMENT_PENDING_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_PAYMENT_STATUS';
     const CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_CANCELLED_STATUS';
     const CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_COMPLETED_STATUS';
+    const CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS';
+    const CRYPTO_PAYMENT_FAILED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_FAILED_STATUS';
 
     const TILTUP_ECOMMERCE_TYPE = 'PRESTASHOP';
+    const TILTUP_SUPPORTED_CURRENCIES = ['EUR', 'USD', 'PLN'];
 
     const CANCEL_CONTROLLER = 'cancel';
     const VALIDATE_CONTROLLER = 'validate';
 
-    const MODULE_HOOKS = ['paymentOptions', 'displayPaymentReturn'];
+    const MODULE_HOOKS = ['paymentOptions', 'displayPaymentReturn', 'displayOrderDetail'];
 
     public function __construct()
     {
@@ -106,16 +109,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return [$cryptoPaymentOption];
     }
 
-    public function hookDisplayPaymentReturn($params)
+    public function hookDisplayPaymentReturn($params): string
     {
         if (!$this->active) {
             return '';
         }
 
-        $merchantOrderId = $params['order']->id;
-        $customer = new Customer($params['order']->id_customer);
-        $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($merchantOrderId, $params['order']->reference, $customer->email);
-
+        $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($params['order']);
         $this->smarty->assign([
             'tiltUpRedirectUrl' => $tiltUpRedirectUrl
         ]);
@@ -123,16 +123,29 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
     }
 
-    // TODO Add check for supported currencies
+    public function hookDisplayOrderDetail($params): string
+    {
+        if (!$this->active) {
+            return '';
+        }
+
+        $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($params['order']);
+        $this->smarty->assign([
+            'isPaymentIncomplete' => $params['order']->current_state === self::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG || $params['order']->current_state === self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG,
+            'tiltUpRedirectUrl' => $tiltUpRedirectUrl
+        ]);
+
+        return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/orderDetail.tpl');
+    }
+
     private function checkCurrency($cart): bool
     {
-        $currency_order = new Currency((int)($cart->
-        id_currency));
-        $currencies_module = $this->getCurrency((int)$cart->id_currency);
-        if (is_array($currencies_module)) {
-            foreach ($currencies_module as $currency_module) {
-                if ($currency_order->id ==
-                    $currency_module['id_currency']) {
+        $orderCurrency = new Currency((int)($cart->id_currency));
+        $moduleCurrencies = $this->getCurrency((int)$cart->id_currency);
+
+        if (is_array($moduleCurrencies)) {
+            foreach ($moduleCurrencies as $moduleCurrency) {
+                if ($orderCurrency->id == $moduleCurrency['id_currency'] && in_array($orderCurrency->iso_code, self::TILTUP_SUPPORTED_CURRENCIES)) {
                     return true;
                 }
             }
@@ -150,23 +163,24 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     }
 
     /**
-     * @param string $orderId
-     * @param string $orderReference
-     * @param string $customerEmail
+     * @param Order $order
      * @return string
+     * @throws Exception
      */
-    private function buildTiltUpRedirectUrl(string $orderId, string $orderReference, string $customerEmail): string
+    private function buildTiltUpRedirectUrl(Order $order): string
     {
+        $customer = new Customer($order->id_customer);
+
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
         $env = Configuration::get(self::TILTUP_ENV_CONFIG);
-        $callbackUrl = $this->buildCallbackUrl($orderReference, $customerEmail);
-        $cancelUrl = $this->buildReturnUrl($orderId, self::CANCEL_CONTROLLER);
+        $callbackUrl = $this->buildCallbackUrl($order->reference, $customer->email);
+        $cancelUrl = $this->buildCancelUrl($order);
 
         return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
                 'merchantId' => $merchantId,
                 'shopId' => $shopId,
-                'merchantOrderId' => $orderId,
+                'merchantOrderId' => $order->id,
                 'type' => self::TILTUP_ECOMMERCE_TYPE,
                 'callbackUrl' => $callbackUrl,
                 'cancelUrl' => $cancelUrl,
@@ -175,15 +189,15 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     /**
      * @param string $orderId
-     * @param string $controllerName
      * @return void
+     * @throws Exception
      */
-    private function buildReturnUrl(string $orderId, string $controllerName): string
+    private function buildCancelUrl(Order $order): string
     {
         return $this->context->link->getModuleLink(
             $this->name,
-            $controllerName,
-            ['orderId' => $orderId, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($orderId)],
+            self::CANCEL_CONTROLLER,
+            ['orderId' => $order->id, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($order->id)],
             true
         );
     }
