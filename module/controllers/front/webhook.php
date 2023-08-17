@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/TiltUpFrontWebhookController.php';
+require_once __DIR__ . '/../../TiltUpAggregatedOrderStatus.php';
 
 class TiltUpCryptoPaymentsModuleWebhookModuleFrontController extends TiltUpFrontWebhookController
 {
