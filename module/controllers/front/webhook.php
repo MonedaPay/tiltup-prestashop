@@ -19,6 +19,7 @@ class TiltUpCryptoPaymentsModuleWebhookModuleFrontController extends TiltUpFront
     private function mapTiltUpToPrestaOrderState(string $tiltUpAggregatedStatus): int
     {
         switch ($tiltUpAggregatedStatus) {
+            case TiltUpAggregatedOrderStatus::CREATED:
             case TiltUpAggregatedOrderStatus::IN_PROGRESS:
                 return (int)Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG);
             case TiltUpAggregatedOrderStatus::FAILURE:
