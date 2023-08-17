@@ -2,11 +2,14 @@
 
 require_once __DIR__ . '/TiltUpFrontWebhookController.php';
 require_once __DIR__ . '/../../TiltUpAggregatedOrderStatus.php';
+require_once __DIR__ . '/../../TiltUpSimpleLogger.php';
 
 class TiltUpCryptoPaymentsModuleWebhookModuleFrontController extends TiltUpFrontWebhookController
 {
     protected function handleRequest(Order $order)
     {
+        TiltUpSimpleLogger::info('Received TiltUp webhook: ' . serialize(Tools::getAllValues()));
+
         $tiltUpAggregatedStatus = Tools::getValue('aggregatedStatus');
         $this->updateOrderState($order, $this->mapTiltUpToPrestaOrderState($tiltUpAggregatedStatus));
         header('HTTP/1.1 200 OK', true, 200);
