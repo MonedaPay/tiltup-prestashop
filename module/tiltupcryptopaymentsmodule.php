@@ -131,8 +131,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($params['order']);
         $this->smarty->assign([
-            'isPaymentIncomplete' => $params['order']->current_state === (int)Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG)
-                || $params['order']->current_state === (int)Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG),
+            'isPaymentIncomplete' => $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG)
+                || $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG),
             'tiltUpRedirectUrl' => $tiltUpRedirectUrl
         ]);
 
