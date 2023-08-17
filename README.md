@@ -10,10 +10,11 @@ TiltUp Prestashop plugin
 2. Download & install [Xampp](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.4.33/) as local PHP
    interpreter.
 3. Download & install [Composer](https://getcomposer.org/download/) (use the installer)
-4. Download & unzip [Prestashop release](https://github.com/PrestaShop/PrestaShop/releases/tag/1.7.8.9) to a dedicated folder. Unzip the `prestashop.zip` file inside as well.
-   - copy the content of this folder to the `vendor` folder
+4. Download & unzip [Prestashop release](https://github.com/PrestaShop/PrestaShop/releases/tag/1.7.8.9) to a dedicated
+   folder. Unzip the `prestashop.zip` file inside as well.
+    - copy the content of this folder to the `vendor` folder
 5. Clone [the PrestaShop-Autocomplete repo](https://github.com/julienbourdeau/PhpStorm-PrestaShop-Autocomplete)
-   - copy the content of it to the `vendor` folder 
+    - copy the content of it to the `vendor` folder
 
 ![intellij-external-library-setup.png](assets/readme/intellij-external-library-setup.png)
 
@@ -26,7 +27,9 @@ TiltUp Prestashop plugin
 4. Navigate to `localhost:8080` to access your shop.
 5. Navigate to `localhost:8080/admin-dev` to access admin panel.
 
-info about credentials is [in confluence](https://tilt-up.atlassian.net/wiki/spaces/TP/pages/92438529/E-Commerce+stores+testing#PrestaShop)
+info about credentials
+is [in confluence](https://tilt-up.atlassian.net/wiki/spaces/TP/pages/92438529/E-Commerce+stores+testing#PrestaShop)
+
 ## Debugging
 
 ### IntelliJ IDEA
@@ -62,3 +65,7 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 - [Blumedia payment module](https://github.com/bluepayment-plugin/prestashop-plugin-1.7)
 - [PayU payment module](https://github.com/PayU-EMEA/plugin_prestashop)
 - [PayNow payment module](https://github.com/pay-now/paynow-prestashop)
+
+## Logging
+
+The logs `INFO` and `ERROR` messages to `var/logs/tiltup_crypto_payments.module`.
