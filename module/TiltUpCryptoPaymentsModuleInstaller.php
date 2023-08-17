@@ -14,8 +14,8 @@ class TiltUpCryptoPaymentsModuleInstaller
         return $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Waiting for TiltUp Crypto Payment'], '#ffc107', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Cancelled'], '#dc3545', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_FAILED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Failed'], '#dc3545', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#20c997', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Partially Completed'], '#198754', true);
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Partially Completed'], '#20c997', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
     }
 
     /**
