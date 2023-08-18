@@ -58,6 +58,13 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 1. Navigate to Admin -> Modules -> Module Manager.
 2. Search for `tiltup` and click `Configure`.
 
+### Admin credentials
+
+      - name: ADMIN_MAIL
+        value: "test@tiltup.io"
+      - name: ADMIN_PASSWD
+        value: "Qwerty123!"
+
 ## Useful links
 
 - [Presta docs](https://devdocs.prestashop-project.org/1.7/modules/creation/tutorial/)
