@@ -41,7 +41,7 @@ services:
       - psdata:/var/www/html
       - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - type: bind
-        source: ./module
+        source: ./tiltupcryptopaymentsmodule
         target: /var/www/html/modules/tiltupcryptopaymentsmodule
       - type: bind
         source: ./scripts
