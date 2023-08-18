@@ -21,21 +21,19 @@
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-$log = new Logger('name');
-$log->pushHandler(new StreamHandler('var/logs/tiltup_module.log', Logger::INFO));
-$GLOBALS['log'] = $log;
+$logger = new Logger('name');
+$logger->pushHandler(new StreamHandler('var/logs/tiltup_module.log', Logger::INFO));
+$GLOBALS['tiltUpLogger'] = $logger;
 
 class TiltUpSimpleLogger
 {
     public static function info(string $msg): void
     {
-        global $log;
-        $log->info($msg);
+        $GLOBALS['tiltUpLogger']->info($msg);
     }
 
     public static function error(string $msg): void
     {
-        global $log;
-        $log->error($msg);
+        $GLOBALS['tiltUpLogger']->error($msg);
     }
 }

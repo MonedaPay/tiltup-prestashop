@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
- * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA.
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +19,10 @@
  */
 class TiltUpAggregatedOrderStatus
 {
-    const CREATED = 'CREATED';
-    const IN_PROGRESS = 'IN_PROGRESS';
-    const UNDERPAID = 'UNDERPAID';
-    const OVERPAID = 'OVERPAID';
-    const SUCCESS = 'SUCCESS';
-    const FAILURE = 'FAILURE';
+    public const CREATED = 'CREATED';
+    public const IN_PROGRESS = 'IN_PROGRESS';
+    public const UNDERPAID = 'UNDERPAID';
+    public const OVERPAID = 'OVERPAID';
+    public const SUCCESS = 'SUCCESS';
+    public const FAILURE = 'FAILURE';
 }

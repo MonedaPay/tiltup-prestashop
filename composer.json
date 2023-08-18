@@ -17,7 +17,8 @@
     "up:xdebug": "docker compose build --no-cache --build-arg xdebug=1 && docker compose up -d",
     "down": "docker compose down --remove-orphans",
     "down:volumes": "docker compose down --remove-orphans -v",
-    "fix": "php ./vendor/bin/php-cs-fixer fix ./tiltupcryptopaymentsmodule",
+    "php-cs-fixer": "php-cs-fixer --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
+    "fix": "php ./vendor/bin/php-cs-fixer fix ./tiltupcryptopaymentsmodule --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
     "package": [
       "@fix",
       "rm -f tiltupcryptopaymentsmodule.zip && 7z a -tzip tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule"

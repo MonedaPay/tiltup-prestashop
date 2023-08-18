@@ -81,11 +81,11 @@ abstract class TiltUpFrontController extends ModuleFrontController
 
     protected function updateOrderState(Order $order, int $newStateId)
     {
-        $currentOrderStateId = (int)$order->getCurrentState();
+        $currentOrderStateId = (int) $order->getCurrentState();
 
         if ($currentOrderStateId !== $newStateId
-            && false === (bool)$order->hasBeenShipped()
-            && false === (bool)$order->hasBeenDelivered()
+            && false === (bool) $order->hasBeenShipped()
+            && false === (bool) $order->hasBeenDelivered()
         ) {
             $orderHistory = new OrderHistory();
             $orderHistory->id_order = $order->id;

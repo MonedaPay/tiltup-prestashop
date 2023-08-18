@@ -158,8 +158,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     private function checkCurrency($cart): bool
     {
-        $orderCurrency = new Currency((int)$cart->id_currency);
-        $moduleCurrencies = $this->getCurrency((int)$cart->id_currency);
+        $orderCurrency = new Currency((int) $cart->id_currency);
+        $moduleCurrencies = $this->getCurrency((int) $cart->id_currency);
 
         if (is_array($moduleCurrencies)) {
             foreach ($moduleCurrencies as $moduleCurrency) {
