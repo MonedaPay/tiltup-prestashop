@@ -17,7 +17,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
-require_once __DIR__ . '/../../EncryptionService.php';
+require_once __DIR__ . '/../../TiltUpEncryptionService.php';
 
 abstract class TiltUpFrontController extends ModuleFrontController
 {
@@ -28,7 +28,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
         $hmac = $this->getHmac();
         $orderId = Tools::getValue('orderId');
 
-        if (!EncryptionService::isValidHmac($orderId, $hmac)) {
+        if (!TiltUpEncryptionService::isValidHmac($orderId, $hmac)) {
             $this->handleInvalidToken();
         }
 
@@ -81,11 +81,11 @@ abstract class TiltUpFrontController extends ModuleFrontController
 
     protected function updateOrderState(Order $order, int $newStateId)
     {
-        $currentOrderStateId = (int) $order->getCurrentState();
+        $currentOrderStateId = (int)$order->getCurrentState();
 
         if ($currentOrderStateId !== $newStateId
-            && false === (bool) $order->hasBeenShipped()
-            && false === (bool) $order->hasBeenDelivered()
+            && false === (bool)$order->hasBeenShipped()
+            && false === (bool)$order->hasBeenDelivered()
         ) {
             $orderHistory = new OrderHistory();
             $orderHistory->id_order = $order->id;

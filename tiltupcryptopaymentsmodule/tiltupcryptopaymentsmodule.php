@@ -17,7 +17,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
-require_once __DIR__ . '/EncryptionService.php';
+require_once __DIR__ . '/TiltUpEncryptionService.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleConfigurator.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleInstaller.php';
 
@@ -158,8 +158,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     private function checkCurrency($cart): bool
     {
-        $orderCurrency = new Currency((int) $cart->id_currency);
-        $moduleCurrencies = $this->getCurrency((int) $cart->id_currency);
+        $orderCurrency = new Currency((int)$cart->id_currency);
+        $moduleCurrencies = $this->getCurrency((int)$cart->id_currency);
 
         if (is_array($moduleCurrencies)) {
             foreach ($moduleCurrencies as $moduleCurrency) {
@@ -219,7 +219,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->context->link->getModuleLink(
             $this->name,
             self::CANCEL_CONTROLLER,
-            ['orderId' => $order->id, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($order->id)],
+            ['orderId' => $order->id, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => TiltUpEncryptionService::generateHmac($order->id)],
             true
         );
     }

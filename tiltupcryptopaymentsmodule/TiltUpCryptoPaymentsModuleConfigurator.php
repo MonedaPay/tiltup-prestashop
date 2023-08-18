@@ -36,10 +36,10 @@ class TiltUpCryptoPaymentsModuleConfigurator
         // this part is executed only when the form is submitted
         if (Tools::isSubmit('submit' . $this->parentModule->name)) {
             // retrieve the value set by the user
-            $merchantId = (string) Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG);
-            $shopId = (string) Tools::getValue(TiltUpCryptoPaymentsModule::SHOP_ID_CONFIG);
-            $env = (string) Tools::getValue(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG);
-            $encryptionKey = (string) Tools::getValue(TiltUpCryptoPaymentsModule::ENCRYPTION_KEY_CONFIG);
+            $merchantId = (string)Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG);
+            $shopId = (string)Tools::getValue(TiltUpCryptoPaymentsModule::SHOP_ID_CONFIG);
+            $env = (string)Tools::getValue(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG);
+            $encryptionKey = (string)Tools::getValue(TiltUpCryptoPaymentsModule::ENCRYPTION_KEY_CONFIG);
 
             // check that the value is valid
             if (empty($merchantId) || empty($shopId) || empty($encryptionKey)) {
@@ -128,7 +128,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
         $helper->submit_action = 'submit' . $this->parentModule->name;
 
         // Default language
-        $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
+        $helper->default_form_language = (int)Configuration::get('PS_LANG_DEFAULT');
 
         // Load current value into the form
         $helper->fields_value[TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG] = Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG, Configuration::get(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG));
