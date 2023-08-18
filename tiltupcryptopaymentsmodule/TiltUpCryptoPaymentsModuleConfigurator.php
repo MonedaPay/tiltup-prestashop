@@ -1,5 +1,22 @@
 <?php
-
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License version 3.0
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ */
 class TiltUpCryptoPaymentsModuleConfigurator
 {
     private TiltUpCryptoPaymentsModule $parentModule;
@@ -18,10 +35,10 @@ class TiltUpCryptoPaymentsModuleConfigurator
         // this part is executed only when the form is submitted
         if (Tools::isSubmit('submit' . $this->parentModule->name)) {
             // retrieve the value set by the user
-            $merchantId = (string)Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG);
-            $shopId = (string)Tools::getValue(TiltUpCryptoPaymentsModule::SHOP_ID_CONFIG);
-            $env = (string)Tools::getValue(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG);
-            $encryptionKey = (string)Tools::getValue(TiltUpCryptoPaymentsModule::ENCRYPTION_KEY_CONFIG);
+            $merchantId = (string) Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG);
+            $shopId = (string) Tools::getValue(TiltUpCryptoPaymentsModule::SHOP_ID_CONFIG);
+            $env = (string) Tools::getValue(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG);
+            $encryptionKey = (string) Tools::getValue(TiltUpCryptoPaymentsModule::ENCRYPTION_KEY_CONFIG);
 
             // check that the value is valid
             if (empty($merchantId) || empty($shopId) || empty($encryptionKey)) {
@@ -44,6 +61,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
 
     /**
      * Builds the configuration form
+     *
      * @return string HTML code
      */
     private function displayForm(): string
@@ -88,9 +106,9 @@ class TiltUpCryptoPaymentsModuleConfigurator
                                 ['id' => 'staging', 'name' => 'Staging'],                             // The value of the 'id' attribute of the <option> tag., 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
                             ],                           // $options contains the data itself.
                             'id' => 'id',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
-                            'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
-                        ]
-                    ]
+                            'name' => 'name',                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
+                        ],
+                    ],
                 ],
                 'submit' => [
                     'title' => $this->parentModule->l('Save'),
@@ -109,7 +127,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
         $helper->submit_action = 'submit' . $this->parentModule->name;
 
         // Default language
-        $helper->default_form_language = (int)Configuration::get('PS_LANG_DEFAULT');
+        $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
 
         // Load current value into the form
         $helper->fields_value[TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG] = Tools::getValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG, Configuration::get(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG));

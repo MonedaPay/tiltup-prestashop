@@ -1,6 +1,23 @@
 <?php
-
-require_once __DIR__ . '/../../EncryptionService.php';
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License version 3.0
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ */
+require_once __DIR__ . '/../../TiltUpEncryptionService.php';
 
 abstract class TiltUpFrontController extends ModuleFrontController
 {
@@ -11,7 +28,7 @@ abstract class TiltUpFrontController extends ModuleFrontController
         $hmac = $this->getHmac();
         $orderId = Tools::getValue('orderId');
 
-        if (!EncryptionService::isValidHmac($orderId, $hmac)) {
+        if (!TiltUpEncryptionService::isValidHmac($orderId, $hmac)) {
             $this->handleInvalidToken();
         }
 
@@ -64,11 +81,11 @@ abstract class TiltUpFrontController extends ModuleFrontController
 
     protected function updateOrderState(Order $order, int $newStateId)
     {
-        $currentOrderStateId = (int)$order->getCurrentState();
+        $currentOrderStateId = (int) $order->getCurrentState();
 
         if ($currentOrderStateId !== $newStateId
-            && false === (bool)$order->hasBeenShipped()
-            && false === (bool)$order->hasBeenDelivered()
+            && false === (bool) $order->hasBeenShipped()
+            && false === (bool) $order->hasBeenDelivered()
         ) {
             $orderHistory = new OrderHistory();
             $orderHistory->id_order = $order->id;

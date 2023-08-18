@@ -1,6 +1,23 @@
 <?php
-
-require_once __DIR__ . '/EncryptionService.php';
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License version 3.0
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ */
+require_once __DIR__ . '/TiltUpEncryptionService.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleConfigurator.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleInstaller.php';
 
@@ -61,11 +78,10 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             Shop::setContext(Shop::CONTEXT_ALL);
         }
 
-        return (
+        return
             parent::install()
             && $this->registerHook(self::MODULE_HOOKS)
-            && (new TiltUpCryptoPaymentsModuleInstaller($this))->installOrderStates()
-        );
+            && (new TiltUpCryptoPaymentsModuleInstaller($this))->installOrderStates();
     }
 
     public function uninstall(): bool
@@ -76,9 +92,9 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             && Configuration::deleteByName(static::ENCRYPTION_KEY_CONFIG);
     }
 
-
     /**
      * This method handles the module's configuration page
+     *
      * @return string The page's HTML content
      */
     public function getContent(): string
@@ -117,7 +133,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         $tiltUpRedirectUrl = $this->buildTiltUpRedirectUrl($params['order']);
         $this->smarty->assign([
-            'tiltUpRedirectUrl' => $tiltUpRedirectUrl
+            'tiltUpRedirectUrl' => $tiltUpRedirectUrl,
         ]);
 
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
@@ -134,7 +150,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             'isPaymentIncomplete' => $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG)
                 || $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG),
             'isPaymentCancelled' => $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG),
-            'tiltUpRedirectUrl' => $tiltUpRedirectUrl
+            'tiltUpRedirectUrl' => $tiltUpRedirectUrl,
         ]);
 
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/orderDetail.tpl');
@@ -142,8 +158,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     private function checkCurrency($cart): bool
     {
-        $orderCurrency = new Currency((int)($cart->id_currency));
-        $moduleCurrencies = $this->getCurrency((int)$cart->id_currency);
+        $orderCurrency = new Currency((int) $cart->id_currency);
+        $moduleCurrencies = $this->getCurrency((int) $cart->id_currency);
 
         if (is_array($moduleCurrencies)) {
             foreach ($moduleCurrencies as $moduleCurrency) {
@@ -166,7 +182,9 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     /**
      * @param Order $order
+     *
      * @return string
+     *
      * @throws Exception
      */
     private function buildTiltUpRedirectUrl(Order $order): string
@@ -191,7 +209,9 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
     /**
      * @param Order $order
+     *
      * @return void
+     *
      * @throws Exception
      */
     private function buildCancelUrl(Order $order): string
@@ -199,7 +219,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->context->link->getModuleLink(
             $this->name,
             self::CANCEL_CONTROLLER,
-            ['orderId' => $order->id, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => EncryptionService::generateHmac($order->id)],
+            ['orderId' => $order->id, 'shopId' => $this->context->shop->id, 'shopGroupId' => $this->context->shop->id_shop_group, 'hmac' => TiltUpEncryptionService::generateHmac($order->id)],
             true
         );
     }
@@ -207,13 +227,14 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     /**
      * @param string $orderReference
      * @param string $customerEmail
+     *
      * @return void
      */
     private function buildCallbackUrl(string $orderReference, string $customerEmail): string
     {
         return $this->context->link->getPageLink('guest-tracking', null, null, [
             'order_reference' => $orderReference,
-            'email' => $customerEmail
+            'email' => $customerEmail,
         ]);
     }
 }
