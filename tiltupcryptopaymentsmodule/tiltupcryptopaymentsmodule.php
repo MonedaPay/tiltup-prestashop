@@ -136,6 +136,15 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             'tiltUpRedirectUrl' => $tiltUpRedirectUrl,
         ]);
 
+        $this->context->controller->registerStylesheet(
+            'tiltupcryptopaymentsmodule-style',
+            $this->_path.'views/css/tiltup.styles.css',
+            [
+                'media' => 'all',
+                'priority' => 1000,
+            ]
+        );
+
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/postPaymentInfo.tpl');
     }
 
@@ -152,6 +161,15 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             'isPaymentCancelled' => $params['order']->current_state === Configuration::getGlobalValue(self::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG),
             'tiltUpRedirectUrl' => $tiltUpRedirectUrl,
         ]);
+
+        $this->context->controller->registerStylesheet(
+            'tiltupcryptopaymentsmodule-style',
+            $this->_path.'views/css/tiltup.styles.css',
+            [
+                'media' => 'all',
+                'priority' => 1000,
+            ]
+        );
 
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/orderDetail.tpl');
     }
