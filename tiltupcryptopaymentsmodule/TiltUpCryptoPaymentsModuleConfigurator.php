@@ -1,4 +1,24 @@
 <?php
+/*
+ * *
+ *  * Copyright since 2007 PrestaShop SA and Contributors
+ *  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *  *
+ *  * NOTICE OF LICENSE
+ *  *
+ *  * This source file is subject to the Academic Free License version 3.0
+ *  * that is bundled with this package in the file LICENSE.md.
+ *  * It is also available through the world-wide-web at this URL:
+ *  * https://opensource.org/licenses/AFL-3.0
+ *  * If you did not receive a copy of the license and are unable to
+ *  * obtain it through the world-wide-web, please send an email
+ *  * to license@prestashop.com so we can send you a copy immediately.
+ *  *
+ *  * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ *  * @copyright Since 2007 PrestaShop SA and Contributors
+ *  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ *
+ */
 
 class TiltUpCryptoPaymentsModuleConfigurator
 {
@@ -44,6 +64,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
 
     /**
      * Builds the configuration form
+     *
      * @return string HTML code
      */
     private function displayForm(): string
@@ -88,9 +109,9 @@ class TiltUpCryptoPaymentsModuleConfigurator
                                 ['id' => 'staging', 'name' => 'Staging'],                             // The value of the 'id' attribute of the <option> tag., 'name' => 'Development'],                             // The value of the 'id' attribute of the <option> tag.
                             ],                           // $options contains the data itself.
                             'id' => 'id',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
-                            'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
-                        ]
-                    ]
+                            'name' => 'name',                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
+                        ],
+                    ],
                 ],
                 'submit' => [
                     'title' => $this->parentModule->l('Save'),
