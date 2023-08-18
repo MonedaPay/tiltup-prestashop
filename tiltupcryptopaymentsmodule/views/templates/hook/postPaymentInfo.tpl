@@ -17,8 +17,8 @@
 * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
 *}
 
-<section>
+<section class="tiltup_order_confirmation_section">
     <p>{l s='Your order is now confirmed. Click the button to complete your payment.' d='Modules.Tiltupcryptopaymentsmodule.Shop'}</p>
-    <input type="button" class="btn btn-primary" onclick="location.href='{$tiltUpRedirectUrl}';"
-           value="Pay with TiltUp"/>
+    <input type="button" class="tiltup_button" onclick="location.href='{$tiltUpRedirectUrl}';"
+           value="{l s='Pay with TiltUp' d='Modules.Tiltupcryptopaymentsmodule.Shop'}"/>
 </section>

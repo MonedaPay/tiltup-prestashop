@@ -1,0 +1,18 @@
+.tiltup_button {
+    background-color: #520CE9;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.tiltup_order_detail_section {
+    background-color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tiltup_order_confirmation_section {
+    margin-bottom: 1rem;
+}
