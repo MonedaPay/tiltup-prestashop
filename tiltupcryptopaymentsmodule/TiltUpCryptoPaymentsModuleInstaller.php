@@ -1,25 +1,23 @@
 <?php
-/*
- * *
- *  * Copyright since 2007 PrestaShop SA and Contributors
- *  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
- *  *
- *  * NOTICE OF LICENSE
- *  *
- *  * This source file is subject to the Academic Free License version 3.0
- *  * that is bundled with this package in the file LICENSE.md.
- *  * It is also available through the world-wide-web at this URL:
- *  * https://opensource.org/licenses/AFL-3.0
- *  * If you did not receive a copy of the license and are unable to
- *  * obtain it through the world-wide-web, please send an email
- *  * to license@prestashop.com so we can send you a copy immediately.
- *  *
- *  * @author    PrestaShop SA and Contributors <contact@prestashop.com>
- *  * @copyright Since 2007 PrestaShop SA and Contributors
- *  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
- *
- */
 
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License version 3.0
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ */
 class TiltUpCryptoPaymentsModuleInstaller
 {
     private TiltUpCryptoPaymentsModule $parentModule;
@@ -47,7 +45,7 @@ class TiltUpCryptoPaymentsModuleInstaller
     private function installState(string $configKey, array $namesByLangCode, string $color, bool $isPaid): bool
     {
         if (Configuration::getGlobalValue($configKey)) {
-            $orderState = new OrderState((int)Configuration::getGlobalValue($configKey));
+            $orderState = new OrderState((int) Configuration::getGlobalValue($configKey));
             // OrderState already installed, no need to do anything.
             if (Validate::isLoadedObject($orderState) && $this->parentModule->name === $orderState->module_name) {
                 return true;
@@ -70,9 +68,9 @@ class TiltUpCryptoPaymentsModuleInstaller
         foreach ($nameByLangIsoCode as $langIsoCode => $name) {
             foreach (Language::getLanguages(false) as $language) {
                 if (Tools::strtolower($language['iso_code']) === $langIsoCode) {
-                    $tabNameByLangId[(int)$language['id_lang']] = $name;
+                    $tabNameByLangId[(int) $language['id_lang']] = $name;
                 } elseif (isset($nameByLangIsoCode['en'])) {
-                    $tabNameByLangId[(int)$language['id_lang']] =
+                    $tabNameByLangId[(int) $language['id_lang']] =
                         $nameByLangIsoCode['en'];
                 }
             }
@@ -94,7 +92,7 @@ class TiltUpCryptoPaymentsModuleInstaller
         $orderState->unremovable = $isUnremovable;
         $orderState->template = $template;
         $orderState->deleted = $isDeleted;
-        $result = (bool)$orderState->add();
+        $result = (bool) $orderState->add();
 
         if (false === $result) {
             $this->parentModule->displayError(sprintf('Failed to create OrderState %s', $configurationKey));
@@ -103,7 +101,7 @@ class TiltUpCryptoPaymentsModuleInstaller
         }
         $result = Configuration::updateGlobalValue(
             $configurationKey,
-            (int)$orderState->id
+            (int) $orderState->id
         );
         if (false === $result) {
             $this->parentModule->displayError(sprintf('Failed to save OrderState %s to Configuration', $configurationKey));
@@ -122,7 +120,7 @@ class TiltUpCryptoPaymentsModuleInstaller
             return false;
         }
 
-        if (false === (bool)Tools::copy($orderStateImgPath, _PS_ORDER_STATE_IMG_DIR_ . $orderState->id . '.png')) {
+        if (false === (bool) Tools::copy($orderStateImgPath, _PS_ORDER_STATE_IMG_DIR_ . $orderState->id . '.png')) {
             $this->parentModule->displayError(sprintf(
                 'Failed to copy icon of OrderState %s',
                 $configurationKey
