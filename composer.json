@@ -3,7 +3,7 @@
   "type": "prestashop-module",
   "autoload": {
     "psr-4": {
-      "TiltUp\\PrestaShopPlugin\\": "module/src/"
+      "TiltUp\\PrestaShopPlugin\\": "tiltupcryptopaymentsmodule/src/"
     }
   },
   "authors": [
