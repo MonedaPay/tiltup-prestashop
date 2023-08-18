@@ -1,36 +1,38 @@
 {
-  "name": "tiltup/prestashop-plugin",
-  "type": "prestashop-module",
-  "autoload": {
-    "psr-4": {
-      "TiltUp\\PrestaShopPlugin\\": "tiltupcryptopaymentsmodule/src/"
-    }
-  },
-  "authors": [
-    {
-      "name": "TiltUp Engineering"
-    }
-  ],
-  "minimum-stability": "dev",
-  "scripts": {
-    "up": "docker compose build --no-cache && docker compose up -d",
-    "up:xdebug": "docker compose build --no-cache --build-arg xdebug=1 && docker compose up -d",
-    "down": "docker compose down --remove-orphans",
-    "down:volumes": "docker compose down --remove-orphans -v",
-    "php-cs-fixer": "php-cs-fixer --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
-    "fix": "php ./vendor/bin/php-cs-fixer fix ./tiltupcryptopaymentsmodule --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
-    "package": [
-      "@fix",
-      "rm -f tiltupcryptopaymentsmodule.zip && 7z a -tzip tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule"
-    ]
-  },
-  "require-dev": {
-    "prestashop/php-dev-tools": "^4.3",
-    "phpstan/phpstan": "^1.10",
-    "phpunit/phpunit": "^5.7"
-  },
-  "config": {
-    "preferred-install": "dist",
-    "prepend-autoloader": false
-  }
+    "name": "tiltup/prestashop-plugin",
+    "type": "prestashop-module",
+    "autoload": {
+        "psr-4": {
+            "TiltUp\\PrestaShopPlugin\\": "tiltupcryptopaymentsmodule/src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "TiltUp Engineering"
+        }
+    ],
+    "minimum-stability": "dev",
+    "scripts": {
+        "up": "docker compose build --no-cache && docker compose up -d",
+        "up:xdebug": "docker compose build --no-cache --build-arg xdebug=1 && docker compose up -d",
+        "down": "docker compose down --remove-orphans",
+        "down:volumes": "docker compose down --remove-orphans -v",
+        "php-cs-fixer": "php-cs-fixer --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
+        "fix": "php ./vendor/bin/php-cs-fixer fix ./tiltupcryptopaymentsmodule --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
+        "package": [
+            "@fix",
+            "rm -f tiltupcryptopaymentsmodule.zip && 7z a -tzip tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule"
+        ]
+    },
+    "require-dev": {
+        "prestashop/php-dev-tools": "^4.3",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^5.7"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "prepend-autoloader": false
+    },
+    "author": "PrestaShop",
+    "license": "OSL-3.0"
 }
