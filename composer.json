@@ -21,7 +21,11 @@
       "@fix",
       "rm -f tiltupcryptopaymentsmodule.zip && 7z a -tzip tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule"
     ],
-    "add-copyright": "./vendor/bin/header-stamp --license=tiltupcryptopaymentsmodule/COPYRIGHT --exclude=vendor,node_modules --header-discrimination-string=\"TiltUp\""
+    "add-copyright": "./vendor/bin/header-stamp --license=tiltupcryptopaymentsmodule/COPYRIGHT --exclude=vendor,node_modules --header-discrimination-string=\"TiltUp\"",
+    "post-install-cmd": [
+      "php vendor/bin/prestashop-coding-standards cs-fixer:init --dest ./tiltupcryptopaymentsmodule",
+      "php vendor/bin/prestashop-coding-standards phpstan:init --dest ./tiltupcryptopaymentsmodule"
+    ]
   },
   "require-dev": {
     "prestashop/php-dev-tools": "^4.3",
