@@ -12,7 +12,7 @@
  * @author         TiltUp Sp. z o. o.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
-*/
+ */
 require_once __DIR__ . '/TiltUpEncryptionService.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleConfigurator.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleInstaller.php';
@@ -66,6 +66,10 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $this->description = $this->l('One-click fast and secure crypto payments.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+
+        if (!$this->isModuleConfigured()) {
+            $this->warning = $this->trans('TiltUp Module requires configuration before first use', [], 'Modules.Tiltupcryptopaymentsmodule.Admin');
+        }
     }
 
     public function install(): bool
@@ -134,7 +138,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         $this->context->controller->registerStylesheet(
             'tiltupcryptopaymentsmodule-style',
-            $this->_path.'views/css/tiltup.styles.css',
+            $this->_path . 'views/css/tiltup.styles.css',
             [
                 'media' => 'all',
                 'priority' => 1000,
@@ -160,7 +164,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         $this->context->controller->registerStylesheet(
             'tiltupcryptopaymentsmodule-style',
-            $this->_path.'views/css/tiltup.styles.css',
+            $this->_path . 'views/css/tiltup.styles.css',
             [
                 'media' => 'all',
                 'priority' => 1000,
