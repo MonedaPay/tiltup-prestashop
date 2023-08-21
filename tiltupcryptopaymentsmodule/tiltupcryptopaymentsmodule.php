@@ -212,7 +212,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
         $shopId = Configuration::get(self::SHOP_ID_CONFIG);
         $env = Configuration::get(self::TILTUP_ENV_CONFIG);
-        $callbackUrl = $this->buildCallbackUrl($order->reference, $customer->email);
+        $callbackUrl = $this->buildCallbackUrl($order, $customer);
         $cancelUrl = $this->buildCancelUrl($order);
 
         return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
@@ -243,16 +243,22 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     }
 
     /**
-     * @param string $orderReference
-     * @param string $customerEmail
+     * @param Order $order
+     * @param Customer $customer
      *
      * @return void
      */
-    private function buildCallbackUrl(string $orderReference, string $customerEmail): string
+    private function buildCallbackUrl(Order $order, Customer $customer): string
     {
-        return $this->context->link->getPageLink('guest-tracking', null, null, [
-            'order_reference' => $orderReference,
-            'email' => $customerEmail,
+        if ($customer->isGuest()) {
+            return $this->context->link->getPageLink('guest-tracking', null, null, [
+                'order_reference' => $order->reference,
+                'email' => $customer->email,
+            ]);
+        }
+
+        return $this->context->link->getPageLink('order-detail', null, null, [
+            'id_order' => $order->id,
         ]);
     }
 }
