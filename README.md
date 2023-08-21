@@ -72,4 +72,4 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 
 ## Logging
 
-The logs `INFO` and `ERROR` messages to `var/logs/tiltup_crypto_payments.module`.
+The logs `INFO` and `ERROR` messages to `var/logs/tiltup_module.log`.
