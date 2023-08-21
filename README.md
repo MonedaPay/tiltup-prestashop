@@ -10,10 +10,6 @@ TiltUp Prestashop plugin
 2. Download & install [Xampp](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.4.33/) as local PHP
    interpreter.
 3. Download & install [Composer](https://getcomposer.org/download/) (use the installer)
-4. Clone [the PrestaShop-Autocomplete repo](https://github.com/julienbourdeau/PhpStorm-PrestaShop-Autocomplete)
-    - copy the content of it to the `vendor` folder
-
-![intellij-external-library-setup.png](assets/readme/intellij-external-library-setup.png)
 
 ## Bootstrapping the application
 
