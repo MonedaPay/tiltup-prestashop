@@ -17,11 +17,16 @@
     "down:volumes": "docker compose down --remove-orphans -v",
     "php-cs-fixer": "php-cs-fixer --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
     "fix": "php ./vendor/bin/php-cs-fixer fix ./tiltupcryptopaymentsmodule --config ./tiltupcryptopaymentsmodule/.php-cs-fixer.dist.php",
+    "analyze": "_PS_ROOT_DIR_=./vendor/presta php ./vendor/bin/phpstan.phar --configuration=tests/phpstan/phpstan.neon analyse ./tiltupcryptopaymentsmodule",
     "package": [
       "@fix",
       "rm -f tiltupcryptopaymentsmodule.zip && 7z a -tzip tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule"
     ],
-    "add-copyright": "./vendor/bin/header-stamp --license=tiltupcryptopaymentsmodule/COPYRIGHT --exclude=vendor,node_modules --header-discrimination-string=\"TiltUp\""
+    "add-copyright": "./vendor/bin/header-stamp --license=tiltupcryptopaymentsmodule/COPYRIGHT --exclude=vendor,node_modules --header-discrimination-string=\"TiltUp\"",
+    "post-install-cmd": [
+      "php vendor/bin/prestashop-coding-standards cs-fixer:init --dest ./tiltupcryptopaymentsmodule",
+      "php vendor/bin/prestashop-coding-standards phpstan:init"
+    ]
   },
   "require-dev": {
     "prestashop/php-dev-tools": "^4.3",
