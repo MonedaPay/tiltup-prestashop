@@ -24,6 +24,7 @@
     ],
     "add-copyright": "./vendor/bin/header-stamp --license=tiltupcryptopaymentsmodule/COPYRIGHT --exclude=vendor,node_modules --header-discrimination-string=\"TiltUp\"",
     "post-install-cmd": [
+      "git clone git@github.com:PrestaShop/PrestaShop.git --depth 1 --branch 1.7.8.9 ./vendor/presta-1.7.8.9",
       "php vendor/bin/prestashop-coding-standards cs-fixer:init --dest ./tiltupcryptopaymentsmodule",
       "php vendor/bin/prestashop-coding-standards phpstan:init"
     ]
