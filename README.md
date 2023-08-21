@@ -10,10 +10,7 @@ TiltUp Prestashop plugin
 2. Download & install [Xampp](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.4.33/) as local PHP
    interpreter.
 3. Download & install [Composer](https://getcomposer.org/download/) (use the installer)
-4. Download & unzip [Prestashop release](https://github.com/PrestaShop/PrestaShop/releases/tag/1.7.8.9) to a dedicated
-   folder. Unzip the `prestashop.zip` file inside as well.
-    - copy the content of this folder to the `vendor` folder
-5. Clone [the PrestaShop-Autocomplete repo](https://github.com/julienbourdeau/PhpStorm-PrestaShop-Autocomplete)
+4. Clone [the PrestaShop-Autocomplete repo](https://github.com/julienbourdeau/PhpStorm-PrestaShop-Autocomplete)
     - copy the content of it to the `vendor` folder
 
 ![intellij-external-library-setup.png](assets/readme/intellij-external-library-setup.png)
@@ -75,4 +72,4 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 
 ## Logging
 
-The logs `INFO` and `ERROR` messages to `var/logs/tiltup_crypto_payments.module`.
+The logs `INFO` and `ERROR` messages to `var/logs/tiltup_module.log`.
