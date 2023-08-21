@@ -1,6 +1,8 @@
-FROM prestashop/prestashop:1.7.8.9-7.4-apache
+ARG PRESTA_IMG=prestashop/prestashop:1.7.8.9-7.4-apache
 
-ARG xdebug
+FROM $PRESTA_IMG
+
+ARG XDEBUG
 
 # Use development php.ini
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -9,7 +11,7 @@ RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 
 # Enable XDebug
-RUN if [ -z "$xdebug" ]; then echo "XDebug disabled"; else  \
+RUN if [ -z "$XDEBUG" ]; then echo "XDebug disabled"; else  \
                                        pecl install xdebug-3.1.5 && docker-php-ext-enable xdebug && echo '[XDebug] \n\
                                        xdebug.mode=develop,debug \n\
                                        xdebug.discover_client_host=1 \n\
