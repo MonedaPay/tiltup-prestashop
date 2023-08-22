@@ -112,7 +112,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: "/"
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:237649144029:certificate/9f2690d1-6454-4112-9e9a-f7aca5189af2
+    alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
     alb.ingress.kubernetes.io/actions.port: >
       {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
 
