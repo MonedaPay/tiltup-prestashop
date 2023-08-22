@@ -275,7 +275,7 @@ spec:
     name: tiltupcryptopaymentsmodule
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-00edcd8cc1fabce48
+    volumeHandle: ${PERSISTENT_VOLUME_HANDLE}
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -294,7 +294,7 @@ spec:
     name: psdata
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-00edcd8cc1fabce48
+    volumeHandle: ${PERSISTENT_VOLUME_HANDLE}
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -313,4 +313,4 @@ spec:
     name: dbdata
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-00edcd8cc1fabce48
+    volumeHandle: ${PERSISTENT_VOLUME_HANDLE}
