@@ -28,6 +28,7 @@ jobs:
     env:
       env-name: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
       app-name: tiltup-prestashop
+      CERTIFICATE_ARN: ${{ vars.CERTIFICATE_ARN }}
     steps:
       - uses: actions/checkout@v3
         with:
