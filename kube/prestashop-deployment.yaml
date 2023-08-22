@@ -271,7 +271,7 @@ spec:
   storageClassName: ""
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: dev
+    namespace: ${NODE_ENV}
     name: tiltupcryptopaymentsmodule
   csi:
     driver: efs.csi.aws.com
@@ -290,7 +290,7 @@ spec:
   storageClassName: ""
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: dev
+    namespace: ${NODE_ENV}
     name: psdata
   csi:
     driver: efs.csi.aws.com
@@ -309,7 +309,7 @@ spec:
   storageClassName: ""
   persistentVolumeReclaimPolicy: Retain
   claimRef:
-    namespace: dev
+    namespace: ${NODE_ENV}
     name: dbdata
   csi:
     driver: efs.csi.aws.com
