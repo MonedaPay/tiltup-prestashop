@@ -82,6 +82,8 @@ metadata:
     kompose.version: 1.30.0 (9d8dcb518)
     service.beta.kubernetes.io/aws-load-balancer-type: alb
     kubernetes.io/ingress.class: alb
+    external-dns.alpha.kubernetes.io/hostname: prestashop.${NODE_ENV}.tiltup.io
+
   creationTimestamp: null
   labels:
     io.kompose.service: prestashop
@@ -113,10 +115,6 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
-    alb.ingress.kubernetes.io/actions.port: >
-      {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
-    alb.ingress.kubernetes.io/conditions.port: >
-      [{"field":"host-header","hostHeaderConfig":{"values":["prestashop.${NODE_ENV}.tiltup.io"]}}]
 
 spec:
   ingressClassName: alb
@@ -128,9 +126,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: port
+                name: prestashop
                 port:
-                  name: use-annotation
+                  number: 80
+
 
 ---
 
