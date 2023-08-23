@@ -106,7 +106,7 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: prestashop.${NODE_ENV}.tiltup.io
     alb.ingress.kubernetes.io/load-balancer-name: k8s-alb-${NODE_ENV}-external
     alb.ingress.kubernetes.io/group.name: k8s-alb-${NODE_ENV}-external
-    alb.ingress.kubernetes.io/group.order: '101'
+    alb.ingress.kubernetes.io/group.order: '5'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/healthcheck-path: "/"
@@ -115,6 +115,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
     alb.ingress.kubernetes.io/actions.port: >
       {"Type":"forward","ForwardConfig":{"TargetGroups":[{"ServiceName":"prestashop","ServicePort":"80","Weight":100}]}}
+    alb.ingress.kubernetes.io/conditions.port: >
+      [{"field":"host-header","hostHeaderConfig":{"values":["prestashop.${NODE_ENV}.tiltup.io"]}}]
 
 spec:
   ingressClassName: alb
