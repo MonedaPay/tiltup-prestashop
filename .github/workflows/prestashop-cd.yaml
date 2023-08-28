@@ -3,7 +3,7 @@ run-name: ${{ (github.head_ref =='' && 'manual') || github.head_ref}} -> ${{ (in
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [ closed, opened, edited, synchronize, reopened ]
 
   workflow_dispatch:
     inputs:
