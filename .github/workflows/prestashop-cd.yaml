@@ -3,7 +3,7 @@ run-name: ${{ (github.head_ref =='' && 'manual') || github.head_ref}} -> ${{ (in
 
 on:
   pull_request:
-    types: [ closed, opened, edited, synchronize, reopened ]
+    types: [ closed ]
 
   workflow_dispatch:
     inputs:
@@ -57,7 +57,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           git tag ${{ github.ref }}
-          gh release create ./tiltupcryptopaymentsmodule "v${GITVERSION_MAJORMINORPATCH}" --generate-notes
+          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./tiltupcryptopaymentsmodule --generate-notes
 
       - id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
