@@ -53,9 +53,13 @@ jobs:
       - name: Create release artifact
         shell: bash
         working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create ./tiltupcryptopaymentsmodule
-          
+          ARCHIVE_FILE_NAME="tiltupcryptopaymentsmodule-v${GITVERSION_MAJORMINORPATCH}.zip"
+          zip -r ${ARCHIVE_FILE_NAME} ./tiltupcryptopaymentsmodule
+          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./${ARCHIVE_FILE_NAME} --generate-notes
+
       - id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
