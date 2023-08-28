@@ -1,4 +1,4 @@
-# tiltup-prestashop - Dev Guide
+# TiltUp Crypto Payments Module for PrestaShop - Dev Guide
 
 This is a developer's guide for our official TiltUp Crypto Payments Module for PrestaShop. For a user guide, refer to
 our [Help center article](https://tiltup.zendesk.com/hc/en-001/articles/13196260302994-How-to-integrate-Payment-Gateway-with-Prestashop-).
