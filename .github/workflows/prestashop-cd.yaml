@@ -50,6 +50,12 @@ jobs:
         run: |
           echo "GitVer: $GITVERSION_MAJORMINORPATCH"
 
+      - name: Create release artifact
+        shell: bash
+        working-directory: .
+        run: |
+          gh release create ./tiltupcryptopaymentsmodule
+          
       - id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
