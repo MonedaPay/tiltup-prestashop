@@ -56,8 +56,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git tag ${{ github.ref }}
-          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./tiltupcryptopaymentsmodule --generate-notes
+          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./tiltupcryptopaymentsmodule/* --generate-notes
 
       - id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
