@@ -56,8 +56,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          zip -r tiltupcryptopaymentsmodule.zip ./tiltupcryptopaymentsmodule
-          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./tiltupcryptopaymentsmodule.zip --generate-notes
+          ARCHIVE_FILE_NAME="tiltupcryptopaymentsmodule-v${GITVERSION_MAJORMINORPATCH}.zip"
+          zip -r ${ARCHIVE_FILE_NAME} ./tiltupcryptopaymentsmodule
+          gh release create "v${GITVERSION_MAJORMINORPATCH}" ./${ARCHIVE_FILE_NAME} --generate-notes
 
       - id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
