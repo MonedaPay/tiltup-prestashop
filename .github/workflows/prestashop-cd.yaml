@@ -51,7 +51,7 @@ jobs:
           echo "GitVer: $GITVERSION_MAJORMINORPATCH"
 
       - name: Create release artifact
-        if: ${{ env.env_name == 'dev' }}
+        if: ${{ env.env-name == 'dev' }}
         shell: bash
         working-directory: .
         env:
