@@ -120,7 +120,7 @@ spec:
   ingressClassName: alb
   rules:
     - host: prestashop.${NODE_ENV}.tiltup.io
-    - http:
+      http:
         paths:
           - path: /
             pathType: Prefix
