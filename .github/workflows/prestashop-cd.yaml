@@ -93,7 +93,7 @@ jobs:
           SHOP_ID: ${{ vars.SHOP_ID }}
         run: |
           source ~/.bashrc
-          envsubst < ./tiltupcryptopaymentsmodule/self_config.yml
+          envsubst < ./tiltupcryptopaymentsmodule/self_config.yml > ./tiltupcryptopaymentsmodule/self_config.yml
           docker build --build-arg GIT_SHA=${GITHUB_SHA} . -t ${{env.app-name}}-${{env.env-name}}
           docker tag ${{env.app-name}}-${{env.env-name}} "${{ secrets.ECR_HOST }}/${{env.app-name}}-${{env.env-name}}:${GITVERSION_FULLSEMVER}"
           docker push "${{ secrets.ECR_HOST }}/${{env.app-name}}-${{env.env-name}}:${GITVERSION_FULLSEMVER}"
