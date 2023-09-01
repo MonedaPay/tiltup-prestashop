@@ -4,7 +4,7 @@ configuration:
   update:
     TILTUP_MERCHANT_ID: "${MERCHANT_ID}"
     TILTUP_SHOP_ID: "${SHOP_ID}"
-    TILTUP_ENV: "${NODE_ENV}"
+    TILTUP_ENV: "${SUBDOMAIN}"
     TILTUP_ENCRYPTION_KEY: "mysecret"
 
 sql:
