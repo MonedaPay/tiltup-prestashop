@@ -59,6 +59,16 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
       - name: ADMIN_PASSWD
         value: "Qwerty123!"
 
+## Logging
+
+The logs `INFO` and `ERROR` messages to `var/logs/tiltup_module.log`.
+
+## Release process
+
+Release artifacts are created automatically on merge to `main` by increasing the patch version. To manually increment
+the version,
+refer to [GitVersion docs](https://gitversion.net/docs/reference/version-increments).
+
 ## Useful links
 
 - [Presta docs](https://devdocs.prestashop-project.org/1.7/modules/creation/tutorial/)
@@ -67,6 +77,3 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 - [PayU payment module](https://github.com/PayU-EMEA/plugin_prestashop)
 - [PayNow payment module](https://github.com/pay-now/paynow-prestashop)
 
-## Logging
-
-The logs `INFO` and `ERROR` messages to `var/logs/tiltup_module.log`.
