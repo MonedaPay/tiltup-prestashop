@@ -89,8 +89,8 @@ jobs:
         if: ${{ env.IMAGE_EXISTS != 0 }}
         env:
           NODE_ENV: ${{ env.env-name }}
-          MERCHANT_ID: ${{ env.MERCHANT_ID }}
-          SHOP_ID: ${{ env.SHOP_ID }}
+          MERCHANT_ID: ${{ vars.MERCHANT_ID }}
+          SHOP_ID: ${{ vars.SHOP_ID }}
         run: |
           source ~/.bashrc
           envsubst < ./tiltupcryptopaymentsmodule/self_config.yml
