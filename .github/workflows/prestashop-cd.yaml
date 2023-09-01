@@ -91,6 +91,7 @@ jobs:
           NODE_ENV: ${{ env.env-name }}
           MERCHANT_ID: ${{ vars.MERCHANT_ID }}
           SHOP_ID: ${{ vars.SHOP_ID }}
+          SUBDOMAIN: ${{ env.env-name == 'production' && 'app' || env.env-name }}
         run: |
           source ~/.bashrc
           envsubst < ./tiltupcryptopaymentsmodule/self_config.yml > ./tiltupcryptopaymentsmodule/self_config.yml.out && mv ./tiltupcryptopaymentsmodule/self_config.yml.out ./tiltupcryptopaymentsmodule/self_config.yml
