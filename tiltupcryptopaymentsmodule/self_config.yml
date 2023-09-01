@@ -2,9 +2,9 @@
 
 configuration:
   update:
-    TILTUP_MERCHANT_ID: "1c74881e-868e-4c06-b689-3510e353f40f"
-    TILTUP_SHOP_ID: "35515f8d-8f71-4711-b4bc-edd19c5164be"
-    TILTUP_ENV: "dev"
+    TILTUP_MERCHANT_ID: "${MERCHANT_ID}"
+    TILTUP_SHOP_ID: "${SHOP_ID}"
+    TILTUP_ENV: "${NODE_ENV}"
     TILTUP_ENCRYPTION_KEY: "mysecret"
 
 sql:
