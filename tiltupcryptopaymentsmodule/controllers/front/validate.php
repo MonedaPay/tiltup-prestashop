@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TiltUp_TiltUpCryptoPaymentsModule extension
  *
@@ -12,7 +13,7 @@
  * @author         TiltUp Sp. z o. o.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
-*/
+ */
 class TiltUpCryptoPaymentsModuleValidateModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
@@ -73,9 +74,16 @@ class TiltUpCryptoPaymentsModuleValidateModuleFrontController extends ModuleFron
             $customer->secure_key
         );
 
-        Tools::redirect('index.php?controller=order-confirmation&id_cart='
-            . (int) $cart->id . '&id_module=' . (int) $this->module->id
-            . '&id_order=' . $this->module->currentOrder . '&key='
-            . $customer->secure_key);
+        if ((bool) Configuration::get(TiltUpCryptoPaymentsModule::REDIRECT_IMMEDIATE_CONFIG) === true) {
+            $order = new Order($this->module->currentOrder);
+            Tools::redirect($this->module->buildTiltUpRedirectUrl($order));
+        } else {
+            Tools::redirect($this->context->link->getPageLink('order-confirmation', null, null, [
+                'id_order' => $this->module->currentOrder,
+                'id_cart' => (int) $cart->id,
+                'id_module' => (int) $this->module->id,
+                'key' => $customer->secure_key,
+            ]));
+        }
     }
 }

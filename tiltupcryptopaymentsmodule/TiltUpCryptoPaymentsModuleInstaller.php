@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TiltUp_TiltUpCryptoPaymentsModule extension
  *
@@ -12,7 +13,9 @@
  * @author         TiltUp Sp. z o. o.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
-*/
+ */
+require_once __DIR__ . '/TiltUpEnv.php';
+
 class TiltUpCryptoPaymentsModuleInstaller
 {
     private TiltUpCryptoPaymentsModule $parentModule;
@@ -29,6 +32,12 @@ class TiltUpCryptoPaymentsModuleInstaller
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_FAILED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Failed'], '#dc3545', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Partially Completed'], '#20c997', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
+    }
+
+    public function setDefaultConfig(): bool
+    {
+        return Configuration::updateValue(TiltUpCryptoPaymentsModule::REDIRECT_IMMEDIATE_CONFIG, true)
+            && Configuration::updateValue(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG, TiltUpEnv::PRODUCTION);
     }
 
     /**

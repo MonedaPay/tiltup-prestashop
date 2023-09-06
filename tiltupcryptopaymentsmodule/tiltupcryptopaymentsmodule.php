@@ -29,6 +29,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     const SHOP_ID_CONFIG = 'TILTUP_SHOP_ID';
     const TILTUP_ENV_CONFIG = 'TILTUP_ENV';
     const ENCRYPTION_KEY_CONFIG = 'TILTUP_ENCRYPTION_KEY';
+    const REDIRECT_IMMEDIATE_CONFIG = 'TILTUP_REDIRECT_IMMEDIATE';
 
     const CRYPTO_PAYMENT_PENDING_STATUS_CONFIG = 'TILTUP_AWAITING_CRYPTO_PAYMENT_STATUS';
     const CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_CANCELLED_STATUS';
@@ -78,10 +79,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             Shop::setContext(Shop::CONTEXT_ALL);
         }
 
+        $tiltUpCryptoPaymentsModuleInstaller = new TiltUpCryptoPaymentsModuleInstaller($this);
+
         return
             parent::install()
             && $this->registerHook(self::MODULE_HOOKS)
-            && (new TiltUpCryptoPaymentsModuleInstaller($this))->installOrderStates();
+            && $tiltUpCryptoPaymentsModuleInstaller->installOrderStates()
+            && $tiltUpCryptoPaymentsModuleInstaller->setDefaultConfig();
     }
 
     public function uninstall(): bool
@@ -89,7 +93,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return Configuration::deleteByName(static::MERCHANT_ID_CONFIG)
             && Configuration::deleteByName(static::SHOP_ID_CONFIG)
             && Configuration::deleteByName(static::TILTUP_ENV_CONFIG)
-            && Configuration::deleteByName(static::ENCRYPTION_KEY_CONFIG);
+            && Configuration::deleteByName(static::ENCRYPTION_KEY_CONFIG)
+            && Configuration::deleteByName(static::REDIRECT_IMMEDIATE_CONFIG);
     }
 
     /**
@@ -174,6 +179,33 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         return $this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/orderDetail.tpl');
     }
 
+    /**
+     * @param Order $order
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public function buildTiltUpRedirectUrl(Order $order): string
+    {
+        $customer = new Customer($order->id_customer);
+
+        $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
+        $shopId = Configuration::get(self::SHOP_ID_CONFIG);
+        $env = Configuration::get(self::TILTUP_ENV_CONFIG);
+        $callbackUrl = $this->buildCallbackUrl($order, $customer);
+        $cancelUrl = $this->buildCancelUrl($order);
+
+        return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
+                'merchantId' => $merchantId,
+                'shopId' => $shopId,
+                'merchantOrderId' => $order->id,
+                'type' => self::TILTUP_ECOMMERCE_TYPE,
+                'callbackUrl' => $callbackUrl,
+                'cancelUrl' => $cancelUrl,
+            ]);
+    }
+
     private function checkCurrency($cart): bool
     {
         $orderCurrency = new Currency((int) $cart->id_currency);
@@ -196,33 +228,6 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
             && Configuration::get(static::SHOP_ID_CONFIG)
             && Configuration::get(static::TILTUP_ENV_CONFIG)
             && Configuration::get(static::ENCRYPTION_KEY_CONFIG);
-    }
-
-    /**
-     * @param Order $order
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    private function buildTiltUpRedirectUrl(Order $order): string
-    {
-        $customer = new Customer($order->id_customer);
-
-        $merchantId = Configuration::get(self::MERCHANT_ID_CONFIG);
-        $shopId = Configuration::get(self::SHOP_ID_CONFIG);
-        $env = Configuration::get(self::TILTUP_ENV_CONFIG);
-        $callbackUrl = $this->buildCallbackUrl($order, $customer);
-        $cancelUrl = $this->buildCancelUrl($order);
-
-        return 'https://payment.' . $env . '.tiltup.io/ecommerce?' . http_build_query([
-                'merchantId' => $merchantId,
-                'shopId' => $shopId,
-                'merchantOrderId' => $order->id,
-                'type' => self::TILTUP_ECOMMERCE_TYPE,
-                'callbackUrl' => $callbackUrl,
-                'cancelUrl' => $cancelUrl,
-            ]);
     }
 
     /**
