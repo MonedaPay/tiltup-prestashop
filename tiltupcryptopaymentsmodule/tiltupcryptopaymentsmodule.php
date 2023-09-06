@@ -226,7 +226,6 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     {
         return Configuration::get(static::MERCHANT_ID_CONFIG)
             && Configuration::get(static::SHOP_ID_CONFIG)
-            && Configuration::get(static::TILTUP_ENV_CONFIG)
             && Configuration::get(static::ENCRYPTION_KEY_CONFIG);
     }
 
