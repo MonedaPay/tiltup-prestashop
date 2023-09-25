@@ -1,4 +1,4 @@
-FROM prestashop/prestashop:1.7.8.9-7.4-apache
+FROM prestashop/prestashop:1.7.8.9-7.3-apache
 
 COPY tiltupcryptopaymentsmodule /var/www/html/modules/tiltupcryptopaymentsmodule
 COPY ./scripts /tmp/post-install-scripts
