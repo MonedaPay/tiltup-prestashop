@@ -16,8 +16,14 @@
  */
 class TiltUpCryptoPaymentsModuleConfigurator
 {
-    private TiltUpCryptoPaymentsModule $parentModule;
-    private string $moduleInstallationTable;
+    /**
+     * @var \TiltUpCryptoPaymentsModule
+     */
+    private $parentModule;
+    /**
+     * @var string
+     */
+    private $moduleInstallationTable;
 
     public function __construct(TiltUpCryptoPaymentsModule $parentModule, string $moduleInstallationTable)
     {

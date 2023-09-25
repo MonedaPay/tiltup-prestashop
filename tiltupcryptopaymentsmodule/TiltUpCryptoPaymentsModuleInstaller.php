@@ -18,7 +18,10 @@ require_once __DIR__ . '/TiltUpEnv.php';
 
 class TiltUpCryptoPaymentsModuleInstaller
 {
-    private TiltUpCryptoPaymentsModule $parentModule;
+    /**
+     * @var \TiltUpCryptoPaymentsModule
+     */
+    private $parentModule;
 
     public function __construct(TiltUpCryptoPaymentsModule $parentModule)
     {

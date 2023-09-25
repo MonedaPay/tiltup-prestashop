@@ -33,7 +33,8 @@
   "require-dev": {
     "prestashop/php-dev-tools": "^4.3",
     "phpstan/phpstan": "^1.10",
-    "phpunit/phpunit": "^5.7"
+    "phpunit/phpunit": "^5.7",
+    "rector/rector": "dev-main"
   },
   "config": {
     "preferred-install": "dist",

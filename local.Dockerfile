@@ -1,4 +1,4 @@
-ARG PRESTA_IMG=prestashop/prestashop:1.7.8.9-7.4-apache
+ARG PRESTA_IMG=prestashop/prestashop:1.7.8.9-7.3-apache
 
 FROM $PRESTA_IMG
 
