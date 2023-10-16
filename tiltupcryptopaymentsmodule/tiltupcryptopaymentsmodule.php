@@ -38,7 +38,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     const CRYPTO_PAYMENT_FAILED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_FAILED_STATUS';
 
     const TILTUP_ECOMMERCE_TYPE = 'PRESTASHOP';
-    const TILTUP_SUPPORTED_CURRENCIES = ['EUR', 'USD', 'PLN'];
+    const TILTUP_SUPPORTED_CURRENCIES = ['EUR', 'USD', 'PLN', 'GBP'];
 
     const CANCEL_CONTROLLER = 'cancel';
     const VALIDATE_CONTROLLER = 'validate';
