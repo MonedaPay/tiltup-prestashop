@@ -21,7 +21,7 @@ use GuzzleHttp\Client;
  */
 class TiltUpClient
 {
-    const HTTP_TIMEOUT = 5000;
+    const HTTP_TIMEOUT = 2000;
 
     /**
      * @var Client
