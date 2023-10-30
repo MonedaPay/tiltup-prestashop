@@ -12,7 +12,7 @@
  * @author         TiltUp Sp. z o. o.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
-*/
+ */
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -23,13 +23,13 @@ $GLOBALS['tiltUpLogger'] = $logger;
 
 class TiltUpSimpleLogger
 {
-    public static function info(string $msg): void
+    public static function info(string $msg, array $context = []): void
     {
-        $GLOBALS['tiltUpLogger']->info($msg);
+        $GLOBALS['tiltUpLogger']->info($msg, $context);
     }
 
-    public static function error(string $msg): void
+    public static function error(string $msg, array $context = []): void
     {
-        $GLOBALS['tiltUpLogger']->error($msg);
+        $GLOBALS['tiltUpLogger']->error($msg, $context);
     }
 }
