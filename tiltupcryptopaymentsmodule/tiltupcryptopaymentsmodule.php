@@ -16,6 +16,7 @@
 require_once __DIR__ . '/TiltUpEncryptionService.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleConfigurator.php';
 require_once __DIR__ . '/TiltUpCryptoPaymentsModuleInstaller.php';
+require_once __DIR__ . '/TiltUpClient.php';
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
@@ -38,12 +39,16 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     const CRYPTO_PAYMENT_FAILED_STATUS_CONFIG = 'TILTUP_CRYPTO_PAYMENT_FAILED_STATUS';
 
     const TILTUP_ECOMMERCE_TYPE = 'PRESTASHOP';
-    const TILTUP_SUPPORTED_CURRENCIES = ['EUR', 'USD', 'PLN', 'GBP'];
 
     const CANCEL_CONTROLLER = 'cancel';
     const VALIDATE_CONTROLLER = 'validate';
 
     const MODULE_HOOKS = ['paymentOptions', 'displayPaymentReturn', 'displayOrderDetail'];
+
+    /**
+     * @var TiltUpClient
+     */
+    private $tiltUpClient;
 
     public function __construct()
     {
@@ -71,6 +76,8 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         if (!$this->isModuleConfigured()) {
             $this->warning = $this->trans('TiltUp Module requires configuration before first use', [], 'Modules.Tiltupcryptopaymentsmodule.Admin');
         }
+
+        $this->tiltUpClient = new TiltUpClient();
     }
 
     public function install(): bool
@@ -210,10 +217,12 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
     {
         $orderCurrency = new Currency((int) $cart->id_currency);
         $moduleCurrencies = $this->getCurrency((int) $cart->id_currency);
+        // TODO Should this be cached?
+        $tiltUpSupportedCurrencies = $this->tiltUpClient->getSupportedCurrencies();
 
         if (is_array($moduleCurrencies)) {
             foreach ($moduleCurrencies as $moduleCurrency) {
-                if ($orderCurrency->id == $moduleCurrency['id_currency'] && in_array($orderCurrency->iso_code, self::TILTUP_SUPPORTED_CURRENCIES)) {
+                if ($orderCurrency->id == $moduleCurrency['id_currency'] && in_array($orderCurrency->iso_code, $tiltUpSupportedCurrencies)) {
                     return true;
                 }
             }

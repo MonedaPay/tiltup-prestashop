@@ -34,7 +34,8 @@
     "prestashop/php-dev-tools": "^4.3",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^5.7",
-    "rector/rector": "dev-main"
+    "rector/rector": "dev-main",
+    "guzzlehttp/guzzle": "5.x"
   },
   "config": {
     "preferred-install": "dist",
