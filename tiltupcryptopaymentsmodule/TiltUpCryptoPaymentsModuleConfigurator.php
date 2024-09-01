@@ -47,7 +47,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
             // check that the value is valid
             if (empty($merchantId) || empty($shopId) || empty($encryptionKey)) {
                 // invalid value, show an error
-                $output = $this->parentModule->displayError($this->parentModule->l('Mandatory TiltUp configuration items missing'));
+                $output = $this->parentModule->displayError($this->parentModule->l('Mandatory Ari10 configuration items missing'));
             } else {
                 // value is ok, update it and display a confirmation message
                 Configuration::updateValue(TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG, $merchantId);
@@ -74,20 +74,20 @@ class TiltUpCryptoPaymentsModuleConfigurator
         $form = [
             'form' => [
                 'legend' => [
-                    'title' => $this->parentModule->l('TiltUp Settings'),
+                    'title' => $this->parentModule->l('Ari10 Settings'),
                     'icon' => 'icon-cogs',
                 ],
                 'input' => [
                     [
                         'type' => 'text',
-                        'label' => $this->parentModule->l('TiltUp Merchant ID'),
+                        'label' => $this->parentModule->l('Ari10 Merchant ID'),
                         'name' => TiltUpCryptoPaymentsModule::MERCHANT_ID_CONFIG,
                         'size' => 32,
                         'required' => true,
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->parentModule->l('TiltUp Shop ID'),
+                        'label' => $this->parentModule->l('Ari10 Shop ID'),
                         'name' => TiltUpCryptoPaymentsModule::SHOP_ID_CONFIG,
                         'size' => 32,
                         'required' => true,
@@ -101,7 +101,7 @@ class TiltUpCryptoPaymentsModuleConfigurator
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->parentModule->l('TiltUp Environment:'),
+                        'label' => $this->parentModule->l('Ari10 Environment:'),
                         'desc' => $this->parentModule->l('For testing purposes, select "Staging"'),
                         'name' => TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG,
                         'required' => false,

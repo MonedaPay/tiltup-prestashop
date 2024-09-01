@@ -68,13 +68,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->l('TiltUp Crypto Payments');
+        $this->displayName = $this->l('Ari10 Crypto Payments');
         $this->description = $this->l('One-click fast and secure crypto payments.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
         if (!$this->isModuleConfigured()) {
-            $this->warning = $this->trans('TiltUp Module requires configuration before first use', [], 'Modules.Tiltupcryptopaymentsmodule.Admin');
+            $this->warning = $this->trans('Ari10 Module requires configuration before first use', [], 'Modules.Tiltupcryptopaymentsmodule.Admin');
         }
 
         $this->tiltUpClient = new TiltUpClient();
@@ -126,13 +126,13 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $cryptoPaymentOption = new PaymentOption();
         $cryptoPaymentOption->setModuleName($this->name)
             ->setCallToActionText($this->trans(
-                'Pay with TiltUp',
+                'Pay with Ari10',
                 [],
                 'Modules.Tiltupcryptopaymentsmodule.Admin'
             ))
             ->setAction($this->context->link->getModuleLink($this->name, 'validate', [], true))
             ->setAdditionalInformation($this->fetch('module:tiltupcryptopaymentsmodule/views/templates/hook/paymentOptionInfo.tpl'))
-            ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/logo.png'));
+            ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/ari10_logo.svg'));
 
         return [$cryptoPaymentOption];
     }
