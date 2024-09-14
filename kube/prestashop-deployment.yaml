@@ -82,7 +82,7 @@ metadata:
     kompose.version: 1.30.0 (9d8dcb518)
     service.beta.kubernetes.io/aws-load-balancer-type: alb
     kubernetes.io/ingress.class: alb
-    external-dns.alpha.kubernetes.io/hostname: prestashop.${SUBDOMAIN}.tiltup.io
+    external-dns.alpha.kubernetes.io/hostname: prestashop.${SUBDOMAIN}.monedapay.io
 
   creationTimestamp: null
   labels:
@@ -119,7 +119,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: prestashop.${SUBDOMAIN}.tiltup.io
+    - host: prestashop.${SUBDOMAIN}.monedapay.io
       http:
         paths:
           - path: /
@@ -173,13 +173,13 @@ spec:
             - name: PS_FOLDER_ADMIN
               value: admin-dev
             - name: PS_DOMAIN
-              value: prestashop.${SUBDOMAIN}.tiltup.io
+              value: prestashop.${SUBDOMAIN}.monedapay.io
             - name: PS_INSTALL_AUTO
               value: "1"
             - name: PS_ENABLE_SSL
               value: "1"
             - name: ADMIN_MAIL
-              value: "test@tiltup.io"
+              value: "test@monedapay.io"
             - name: ADMIN_PASSWD
               value: "Qwerty123!"
           image: ${ECR_HOST}/tiltup-prestashop-${NODE_ENV}:${GITVERSION_FULLSEMVER}
