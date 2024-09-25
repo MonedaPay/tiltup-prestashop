@@ -118,7 +118,7 @@ jobs:
           # TODO: automate prefix
           PREFIX_NAME="prestashop"
           
-          FULL_DOMAIN="${PREFIX_NAME}.${{inputs.env-name}}.monedapay.io"
+          FULL_DOMAIN="${PREFIX_NAME}.${SUBDOMAIN}.monedapay.io"
           echo "DOMAIN ${FULL_DOMAIN}"
           
           export CERT_ARN=$(aws acm list-certificates --query "CertificateSummaryList[?DomainName=='$FULL_DOMAIN'].CertificateArn" --output text | cut -f 1)
