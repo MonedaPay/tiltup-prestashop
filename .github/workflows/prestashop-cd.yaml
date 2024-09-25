@@ -124,7 +124,7 @@ jobs:
           export CERT_ARN=$(aws acm list-certificates --query "CertificateSummaryList[?DomainName=='$FULL_DOMAIN'].CertificateArn" --output text | cut -f 1)
           echo "CERT_ARN ${CERT_ARN}"
           
-          aws eks update-kubeconfig --region ${{inputs.AWS_REGION }} --name ${{inputs.env-name}}
+          aws eks update-kubeconfig --region ${AWS_REGION} --name ${{inputs.env-name}}
           aws sts get-caller-identity
           
           CLUSTER_ENDPOINT=$(aws eks describe-cluster --name ${{inputs.env-name}} | jq .cluster.endpoint | sed "s/https:\/\///g" )
