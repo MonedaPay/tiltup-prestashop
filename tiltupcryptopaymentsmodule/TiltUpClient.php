@@ -89,6 +89,6 @@ class TiltUpClient
     {
         $env = Configuration::get(TiltUpCryptoPaymentsModule::TILTUP_ENV_CONFIG);
 
-        return 'https://be.' . $env . '.tiltup.io/graphql';
+        return 'https://be.' . $env . '.monedapay.io/graphql';
     }
 }
