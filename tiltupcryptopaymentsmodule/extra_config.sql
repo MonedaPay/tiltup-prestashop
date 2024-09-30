@@ -1,6 +1,6 @@
 /**
  *
-  * Copyright since 2023 TiltUp Sp z o. o.
+  * Copyright since 2023 Moneda Solutions Ltd.
   *
    NOTICE OF LICENSE
   *
@@ -12,8 +12,8 @@
   * obtain it through the world-wide-web, please send an email
   * to license@prestashop.com so we can send you a copy immediately.
   *
-  * @author  TiltUp Sp. z o.o
-  * @copyright Since 2023 TiltUp Sp z o. o.
+  * @author  Moneda Solutions Ltd.
+  * @copyright Since 2023 Moneda Solutions Ltd.
   * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
 
  */

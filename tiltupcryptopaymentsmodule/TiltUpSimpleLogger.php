@@ -9,7 +9,7 @@
  * It is also available through the world-wide-web at this URL:
  * https://www.gnu.org/licenses/lgpl-3.0.en.html
  *
- * @author         TiltUp Sp. z o. o.
+ * @author         Moneda Solutions Ltd.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
  */

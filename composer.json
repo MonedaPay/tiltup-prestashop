@@ -6,7 +6,7 @@
       "TiltUp\\PrestaShopPlugin\\": "tiltupcryptopaymentsmodule/src/"
     }
   },
-  "author": "TiltUp Engineering",
+  "author": "Moneda Pay Ltd.",
   "version": "1.0.0",
   "minimum-stability": "dev",
   "scripts": {
