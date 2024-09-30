@@ -10,7 +10,7 @@
  * It is also available through the world-wide-web at this URL:
  * https://www.gnu.org/licenses/lgpl-3.0.en.html
  *
- * @author         TiltUp Sp. z o. o.
+ * @author         Moneda Solutions Ltd.
  * @copyright      Copyright (c) 2023-2031
  * @license        https://www.gnu.org/licenses/lgpl-3.0.en.html GNU Lesser General Public License
  */
@@ -30,11 +30,11 @@ class TiltUpCryptoPaymentsModuleInstaller
 
     public function installOrderStates(): bool
     {
-        return $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Pending'], '#ffc107', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Cancelled'], '#dc3545', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_FAILED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Failed'], '#dc3545', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Partially Completed'], '#20c997', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'TiltUp Crypto Payment Completed'], '#198754', true);
+        return $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Crypto Payment Pending'], '#ffc107', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'Crypto Payment Cancelled'], '#dc3545', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_FAILED_STATUS_CONFIG, ['en' => 'Crypto Payment Failed'], '#dc3545', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'Crypto Payment Partially Completed'], '#20c997', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'Crypto Payment Completed'], '#198754', true);
     }
 
     public function setDefaultConfig(): bool

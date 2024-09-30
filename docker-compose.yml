@@ -33,7 +33,7 @@ services:
       PS_DEV_MODE: 1
       PS_FOLDER_INSTALL: install-dev
       PS_FOLDER_ADMIN: admin-dev
-      ADMIN_MAIL: test@tiltup.io
+      ADMIN_MAIL: test@monedapay.io
       ADMIN_PASSWD: Qwerty123!
     networks:
       - prestashop_network
