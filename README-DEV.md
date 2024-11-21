@@ -55,7 +55,7 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 ### Admin credentials
 
       - name: ADMIN_MAIL
-        value: "test@tiltup.io"
+        value: "test@monedapay.io"
       - name: ADMIN_PASSWD
         value: "Qwerty123!"
 
