@@ -21,8 +21,8 @@ our [Help center article](https://tiltup.zendesk.com/hc/en-001/articles/13196260
 4. Navigate to `localhost:8080` to access your shop.
 5. Navigate to `localhost:8080/admin-dev` to access admin panel.
 
-info about credentials
-is [in confluence](https://tilt-up.atlassian.net/wiki/spaces/TP/pages/92438529/E-Commerce+stores+testing#PrestaShop)
+info about test credentials
+is [in confluence](https://ari10help.zendesk.com/hc/en-001/articles/22733841848338-How-to-integrate-Payment-Gateway-with-Prestashop)
 
 ## Debugging
 
@@ -51,13 +51,6 @@ php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 
 1. Navigate to Admin -> Modules -> Module Manager.
 2. Search for `tiltup` and click `Configure`.
-
-### Admin credentials
-
-      - name: ADMIN_MAIL
-        value: "test@monedapay.io"
-      - name: ADMIN_PASSWD
-        value: "Qwerty123!"
 
 ## Logging
 
