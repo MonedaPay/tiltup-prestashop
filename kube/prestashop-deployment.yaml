@@ -180,7 +180,7 @@ spec:
             - name: ADMIN_MAIL
               value: "test@monedapay.io"
             - name: ADMIN_PASSWD
-              value: "Qwerty123!"
+              value: "TestPwd123$%^"
           image: ${ECR_HOST}/tiltup-prestashop-${NODE_ENV}:${GITVERSION_FULLSEMVER}
           name: prestashop
           ports:

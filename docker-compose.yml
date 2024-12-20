@@ -34,7 +34,7 @@ services:
       PS_FOLDER_INSTALL: install-dev
       PS_FOLDER_ADMIN: admin-dev
       ADMIN_MAIL: test@monedapay.io
-      ADMIN_PASSWD: Qwerty123!
+      ADMIN_PASSWD: TestPwd123$%^
     networks:
       - prestashop_network
     volumes:
