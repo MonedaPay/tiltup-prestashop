@@ -143,7 +143,7 @@ jobs:
           aws sts get-caller-identity
           for f in *;
           do
-            envsubst < $f | kubectl apply -n ${{env.env-name}} -f -
+            envsubst < $f | kubectl apply -n ${{env.env-name}} --validate=false -f -
           done
           
           kubectl rollout status deployment ${{env.app-name}} -n ${{env.env-name}} --timeout=180s
