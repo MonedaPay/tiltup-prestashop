@@ -138,7 +138,7 @@ jobs:
           # To make sure tunnel gets set
           sleep 5
   
-          kubectl config set-cluster $CLUSTER_ARN --server=https://localhost:6443 --insecure-skip-tls-verify=true
+          kubectl config set-cluster $CLUSTER_ARN --server=https://127.0.0.1:6443 --insecure-skip-tls-verify=true
           aws eks update-kubeconfig --region ${{vars.AWS_REGION }} --name ${{env.env-name}}
           aws sts get-caller-identity
           for f in *;
