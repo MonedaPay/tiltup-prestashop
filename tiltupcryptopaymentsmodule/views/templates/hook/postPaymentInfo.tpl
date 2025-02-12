@@ -16,5 +16,5 @@
 <section class="tiltup_order_confirmation_section">
     <p>{l s='Your order is now confirmed. Click the button to complete your payment.' d='Modules.Tiltupcryptopaymentsmodule.Shop'}</p>
     <input type="button" class="tiltup_button" onclick="location.href='{$tiltUpRedirectUrl}';"
-           value="{l s='Pay with TiltUp' d='Modules.Tiltupcryptopaymentsmodule.Shop'}"/>
+           value="{l s='Pay with Crypto using Ari10' d='Modules.Tiltupcryptopaymentsmodule.Shop'}"/>
 </section>
