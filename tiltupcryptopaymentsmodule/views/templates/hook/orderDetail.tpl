@@ -22,6 +22,6 @@
             <p>{l s='Looks like you cancelled your payment with Ari10. Click the button to try again.' d='Modules.Tiltupcryptopaymentsmodule.Shop'}</p>
         {/if}
         <input type="button" class="tiltup_button" onclick="location.href='{$tiltUpRedirectUrl}';"
-               value="{l s='Pay with Ari10' d='Modules.Tiltupcryptopaymentsmodule.Shop'}"/>
+               value="{l s='Pay with Crypto using Ari10' d='Modules.Tiltupcryptopaymentsmodule.Shop'}"/>
     </section>
 {/if}

@@ -126,7 +126,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $cryptoPaymentOption = new PaymentOption();
         $cryptoPaymentOption->setModuleName($this->name)
             ->setCallToActionText($this->trans(
-                'Pay with Ari10',
+                'Pay with Crypto using Ari10',
                 [],
                 'Modules.Tiltupcryptopaymentsmodule.Admin'
             ))
