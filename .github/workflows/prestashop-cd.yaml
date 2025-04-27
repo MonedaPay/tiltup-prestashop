@@ -23,7 +23,7 @@ on:
 jobs:
   prestashop-cd:
     name: 'Prestashop - deploy'
-    runs-on: [ ubuntu-20.04 ]
+    runs-on: [ ubuntu-latest ]
     environment: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
     env:
       env-name: ${{ (inputs.env-name == '' && 'dev') || inputs.env-name }}
