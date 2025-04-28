@@ -110,6 +110,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SUBDOMAIN: ${{ env.env-name == 'production' && 'app' || env.env-name }}
           DOMAIN_NAME: ${{ env.env-name == 'production' && 'app' || env.env-name }}
+          BASTION_HOST_ID: ${{ env.BASTION_HOST_ID }}
 
         working-directory: ./kube
         run: |
