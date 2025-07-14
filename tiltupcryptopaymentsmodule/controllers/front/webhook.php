@@ -46,6 +46,8 @@ class TiltUpCryptoPaymentsModuleWebhookModuleFrontController extends TiltUpFront
                 return (int) Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG);
             case TiltUpAggregatedOrderStatus::UNDERPAID:
                 return (int) Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG);
+            case TiltUpAggregatedOrderStatus::AML_SCREENING:
+                return (int) Configuration::getGlobalValue(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_AML_SCREENING);
         }
 
         throw new Exception('Unknown TiltUp aggregated status: ' . $tiltUpAggregatedStatus);

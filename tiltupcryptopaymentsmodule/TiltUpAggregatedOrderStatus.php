@@ -21,4 +21,5 @@ class TiltUpAggregatedOrderStatus
     public const OVERPAID = 'OVERPAID';
     public const SUCCESS = 'SUCCESS';
     public const FAILURE = 'FAILURE';
+    public const AML_SCREENING = 'AML_SCREENING';
 }
