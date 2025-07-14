@@ -31,11 +31,11 @@ class TiltUpCryptoPaymentsModuleInstaller
     public function installOrderStates(): bool
     {
         return $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PENDING_STATUS_CONFIG, ['en' => 'Crypto Payment Pending'], '#ffc107', false)
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_AML_SCREENING, ['en' => 'Crypto Payment Waiting for AML screening'], '#ffc107', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_CANCELLED_STATUS_CONFIG, ['en' => 'Crypto Payment Cancelled'], '#dc3545', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_FAILED_STATUS_CONFIG, ['en' => 'Crypto Payment Failed'], '#dc3545', false)
             && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_PARTIALLY_COMPLETED_STATUS_CONFIG, ['en' => 'Crypto Payment Partially Completed'], '#20c997', false)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'Crypto Payment Completed'], '#198754', true)
-            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_AML_SCREENING, ['en' => 'Crypto Payment Waiting for AML screening'], '#ffc107', true);
+            && $this->installState(TiltUpCryptoPaymentsModule::CRYPTO_PAYMENT_COMPLETED_STATUS_CONFIG, ['en' => 'Crypto Payment Completed'], '#198754', true);
     }
 
     public function setDefaultConfig(): bool
