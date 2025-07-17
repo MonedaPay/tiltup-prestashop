@@ -56,7 +56,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         $this->name = 'tiltupcryptopaymentsmodule';
         $this->tab = 'payments_gateways';
         $this->version = '1.0.0';
-        $this->author = 'TiltUp Engineering';
+        $this->author = 'Ari10';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '1.7.0.0',
@@ -70,7 +70,7 @@ class TiltUpCryptoPaymentsModule extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Ari10 Crypto Payments');
-        $this->description = $this->l('One-click fast and secure crypto payments.');
+        $this->description = $this->l('Fast and secure crypto payments');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 

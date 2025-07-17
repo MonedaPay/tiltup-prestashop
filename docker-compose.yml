@@ -1,4 +1,5 @@
-version: '3'
+name: monedaypay_presta
+
 services:
   mysql:
     container_name: mysql
