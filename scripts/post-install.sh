@@ -21,7 +21,7 @@ if ! mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT 1 FR
     mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "INSERT INTO ps_currency (name, iso_code, numeric_iso_code, \`precision\`, conversion_rate, deleted, active, unofficial, modified) VALUES ('', 'PLN', 985, 2, 4.250000, 0, 1, 0, 0)"
 
     # Get the ID of the newly created PLN currency
-    PLN_ID=$(mysql _N -s -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT id_currency FROM ps_currency WHERE iso_code='PLN'")
+    PLN_ID=$(mysql -N -s -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT id_currency FROM ps_currency WHERE iso_code='PLN'")
 
     # Insert language-specific data for PLN currency
     echo "Adding PLN language-specific data..."
