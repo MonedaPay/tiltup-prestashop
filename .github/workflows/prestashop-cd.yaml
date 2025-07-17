@@ -197,18 +197,6 @@ jobs:
               break
             fi
             
-            # Also check if Apache is already running (backup check)
-            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "resuming normal operations"; then
-              echo "Apache web server is running!"
-              break
-            fi
-            
-            # Check if health check is responding (ELB health checker indicates service is up)
-            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=20 2>/dev/null | grep -q "ELB-HealthChecker"; then
-              echo "Web server is responding to health checks!"
-              break
-            fi
-            
             echo "Web server not ready yet, waiting..."
             sleep 10
           done
