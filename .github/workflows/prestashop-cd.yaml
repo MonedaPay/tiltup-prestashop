@@ -149,3 +149,24 @@ jobs:
           done
           
           kubectl rollout status deployment ${{env.app-name}} -n ${{env.env-name}} --timeout=180s
+          
+          # Wait for web server to start by monitoring logs
+          echo "Waiting for web server to start..."
+          POD_NAME=$(kubectl get pods -n ${{env.env-name}} -l app=${{env.app-name}} -o jsonpath='{.items[0].metadata.name}')
+          echo "Monitoring logs for pod: $POD_NAME"
+          
+          timeout 300 bash -c '
+            while true; do
+              if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "Starting web server now"; then
+                echo "Web server started successfully!"
+                exit 0
+              fi
+              echo "Web server not ready yet, waiting..."
+              sleep 5
+            done
+          ' || {
+            echo "Timeout: Web server did not start within 5 minutes"
+            echo "Pod logs:"
+            kubectl logs -n ${{env.env-name}} $POD_NAME --tail=100 || echo "Could not retrieve logs"
+            exit 1
+          }
