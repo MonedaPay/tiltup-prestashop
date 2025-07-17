@@ -28,9 +28,9 @@ if [ -n "$PLN_CURRENCY_ID" ] && [ -n "$TILTUP_MODULE_ID" ]; then
   if ! mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT 1 FROM ps_module_currency WHERE id_module='$TILTUP_MODULE_ID' AND id_currency='$PLN_CURRENCY_ID'" | grep -q 1; then
     echo "Enabling crypto-payments-module for PLN currency..."
     mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "INSERT INTO ps_module_currency (id_module, id_shop, id_currency) VALUES ('$TILTUP_MODULE_ID', 1, '$PLN_CURRENCY_ID')"
-    echo "Successfully enabled rypto-payments-module for PLN currency"
+    echo "Successfully enabled crypto-payments-module for PLN currency"
   else
-    echo "rypto-payments-module is already enabled for PLN currency - skipping"
+    echo "crypto-payments-module is already enabled for PLN currency - skipping"
   fi
 else
   echo "Warning: Could not find PLN currency ID or Tiltup module ID"
