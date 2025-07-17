@@ -27,7 +27,7 @@ if ! mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT 1 FR
     echo "Adding PLN language-specific data..."
     # Get all available languages
     mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT id_lang FROM ps_lang WHERE active=1" | grep -v id_lang | while read lang_id; do
-      mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "INSERT INTO ps_currency_lang (id_currency, id_lang, name, symbol) VALUES ($PLN_ID, $lang_id, 'Polish Zloty', 'zl ')"
+      mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "INSERT INTO ps_currency_lang (id_currency, id_lang, name, symbol) VALUES ($PLN_ID, $lang_id, 'Polish Zloty', 'zl')"
     done
 
     # Add PLN currency to shop association
@@ -67,12 +67,12 @@ if [ -n "$PLN_CURRENCY_ID" ]; then
   echo "PLN has been set as default currency"
 fi
 
-echo "Uninstalling Customer Reassurance module..."
+echo "Uninstalling Customer Reassurance module, because it was showing some annoying messages"
 php bin/console prestashop:module uninstall blockreassurance
 
 echo "Cleaning up cache and logs..."
 php bin/console cache:clear
-rm -rf /var/www/html/var/cache/*
-rm -rf /var/www/html/var/logs
+rm -rf var/cache/*
+rm -rf var/logs
 
 echo "post-install script completed successfully"
