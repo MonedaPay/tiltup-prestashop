@@ -9,9 +9,18 @@ php bin/console prestashop:module configure tiltupcryptopaymentsmodule
 
 echo "Checking PLN currency status..."
 if ! mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT 1 FROM ps_currency WHERE iso_code='PLN' AND active=1" | grep -q 1; then
-  echo "PLN currency not found or inactive - activating PLN currency..."
-  php bin/console prestashop:currency:add PLN --activate --no-interaction
-  echo "PLN currency has been successfully activated"
+  echo "PLN currency not found or inactive - checking if it exists..."
+  
+  # Check if PLN currency exists but is inactive
+  if mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "SELECT 1 FROM ps_currency WHERE iso_code='PLN'" | grep -q 1; then
+    echo "PLN currency exists but is inactive - activating it..."
+    mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "UPDATE ps_currency SET active=1 WHERE iso_code='PLN'"
+    echo "PLN currency has been activated"
+  else
+    echo "PLN currency does not exist - creating it..."
+    mysql -h"$DB_SERVER" -u"$DB_USER" -p"$DB_PASSWD" "$DB_NAME" -e "INSERT INTO ps_currency (name, iso_code, numeric_iso_code, precision, conversion_rate, deleted, active, unofficial, modified) VALUES ('', 'PLN', 985, 2, 4.250000, 0, 1, 0, 0)"
+    echo "PLN currency has been created successfully"
+  fi
 else
   echo "PLN currency is already active - skipping activation"
 fi
