@@ -179,28 +179,38 @@ jobs:
           fi
           echo "Monitoring logs for pod: $POD_NAME"
           
-          timeout 300 bash -c '
-            while true; do
-              if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "Starting web server now"; then
-                echo "Web server started successfully!"
-                exit 0
-              fi
-              # Also check if Apache is already running (backup check)
-              if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "resuming normal operations"; then
-                echo "Apache web server is running!"
-                exit 0
-              fi
-              # Check if health check is responding (ELB health checker indicates service is up)
-              if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=20 2>/dev/null | grep -q "ELB-HealthChecker"; then
-                echo "Web server is responding to health checks!"
-                exit 0
-              fi
-              echo "Web server not ready yet, waiting..."
-              sleep 5
-            done
-          ' || {
-            echo "Timeout: Web server did not start within 5 minutes"
-            echo "Pod logs:"
-            kubectl logs -n ${{env.env-name}} $POD_NAME --tail=100 || echo "Could not retrieve logs"
-            exit 1
-          }
+          # Monitor web server startup with timeout
+          START_TIME=$(date +%s)
+          TIMEOUT=300
+          
+          while true; do
+            CURRENT_TIME=$(date +%s)
+            if [ $((CURRENT_TIME - START_TIME)) -gt $TIMEOUT ]; then
+              echo "Timeout: Web server did not start within 5 minutes"
+              echo "Pod logs:"
+              kubectl logs -n ${{env.env-name}} $POD_NAME --tail=100 || echo "Could not retrieve logs"
+              exit 1
+            fi
+            
+            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "Starting web server now"; then
+              echo "Web server started successfully!"
+              break
+            fi
+            
+            # Also check if Apache is already running (backup check)
+            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "resuming normal operations"; then
+              echo "Apache web server is running!"
+              break
+            fi
+            
+            # Check if health check is responding (ELB health checker indicates service is up)
+            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=20 2>/dev/null | grep -q "ELB-HealthChecker"; then
+              echo "Web server is responding to health checks!"
+              break
+            fi
+            
+            echo "Web server not ready yet, waiting..."
+            sleep 10
+          done
+          
+          echo "Deployment completed successfully!"
