@@ -67,6 +67,9 @@ if [ -n "$PLN_CURRENCY_ID" ]; then
   echo "PLN has been set as default currency"
 fi
 
+echo "Uninstalling Customer Reassurance module..."
+php bin/console prestashop:module uninstall blockreassurance
+
 echo "Cleaning up cache and logs..."
 php bin/console cache:clear
 rm -rf /var/www/html/var/cache/*
