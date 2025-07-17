@@ -22,3 +22,6 @@ INSERT IGNORE INTO ps_carrier_zone (id_carrier, id_zone)
 SELECT c.id_carrier, z.id_zone
 FROM ps_carrier c
          JOIN ps_zone z;
+
+INSERT INTO ps_currency (name, iso_code, numeric_iso_code, `precision`, conversion_rate, deleted, active, unofficial, modified)
+VALUES ('', 'GBP', 826, 2, 0.200000, 0, 1, 0, 0);
