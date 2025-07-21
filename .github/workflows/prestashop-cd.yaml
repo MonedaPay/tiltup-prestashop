@@ -148,4 +148,57 @@ jobs:
             envsubst < $f | kubectl apply -n ${{env.env-name}} --validate=false -f -
           done
           
-          kubectl rollout status deployment ${{env.app-name}} -n ${{env.env-name}} --timeout=180s
+          # Check deployment status
+          echo "Checking deployment status..."
+          kubectl get deployments -n ${{env.env-name}}
+          
+          # Wait for deployment to complete
+          kubectl rollout status deployment tiltup-prestashop -n ${{env.env-name}} --timeout=180s
+          
+          # Debug deployment issues if rollout fails
+          if [ $? -ne 0 ]; then
+            echo "Deployment failed, debugging..."
+            kubectl describe deployment tiltup-prestashop -n ${{env.env-name}}
+            kubectl get pods -n ${{env.env-name}}
+            kubectl describe pods -n ${{env.env-name}}
+            exit 1
+          fi
+          
+          # Wait for web server to start by monitoring logs
+          echo "Waiting for web server to start..."
+          
+          # Wait for pods to be ready and get the pod name
+          echo "Waiting for pods to be ready..."
+          kubectl wait --for=condition=ready pod -l io.kompose.service=prestashop -n ${{env.env-name}} --timeout=300s
+          
+          POD_NAME=$(kubectl get pods -n ${{env.env-name}} -l io.kompose.service=prestashop -o jsonpath='{.items[0].metadata.name}')
+          if [ -z "$POD_NAME" ]; then
+            echo "Error: No pods found with label io.kompose.service=prestashop"
+            kubectl get pods -n ${{env.env-name}}
+            exit 1
+          fi
+          echo "Monitoring logs for pod: $POD_NAME"
+          
+          # Monitor web server startup with timeout
+          START_TIME=$(date +%s)
+          TIMEOUT=300
+          
+          while true; do
+            CURRENT_TIME=$(date +%s)
+            if [ $((CURRENT_TIME - START_TIME)) -gt $TIMEOUT ]; then
+              echo "Timeout: Web server did not start within 5 minutes"
+              echo "Pod logs:"
+              kubectl logs -n ${{env.env-name}} $POD_NAME --tail=100 || echo "Could not retrieve logs"
+              exit 1
+            fi
+            
+            if kubectl logs -n ${{env.env-name}} $POD_NAME --tail=50 2>/dev/null | grep -q "Starting web server now"; then
+              echo "Web server started successfully!"
+              break
+            fi
+            
+            echo "Web server not ready yet, waiting..."
+            sleep 10
+          done
+          
+          echo "Deployment completed successfully!"

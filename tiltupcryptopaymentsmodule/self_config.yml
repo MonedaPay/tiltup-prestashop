@@ -6,6 +6,7 @@ configuration:
     TILTUP_SHOP_ID: "${SHOP_ID}"
     TILTUP_ENV: "${SUBDOMAIN}"
     TILTUP_ENCRYPTION_KEY: "mysecret"
+    TILTUP_REDIRECT_IMMEDIATE: "true"
 
 sql:
   - "extra_config.sql"

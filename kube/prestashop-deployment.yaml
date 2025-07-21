@@ -158,6 +158,7 @@ spec:
       labels:
         io.kompose.network/prestashop-network: "true"
         io.kompose.service: prestashop
+        app: tiltup-prestashop
     spec:
       containers:
         - env:

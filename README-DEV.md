@@ -47,6 +47,17 @@ php bin/console prestashop:module install tiltupcryptopaymentsmodule
 php bin/console prestashop:module uninstall tiltupcryptopaymentsmodule
 ```
 
+### Currency Configuration
+
+**Important**: Polish Zloty (PLN) currency is automatically enabled during the first boot process. This is handled by the post-install script which:
+
+- Checks if PLN currency is already active
+- Activates PLN currency if not present
+- Configures it for immediate use
+- Enables the tiltupcryptopaymentsmodule for PLN currency
+
+Operators do not need to manually enable PLN currency as it is available by default after deployment.
+
 ### Module configuration
 
 1. Navigate to Admin -> Modules -> Module Manager.
